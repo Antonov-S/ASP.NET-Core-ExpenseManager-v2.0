@@ -1,6 +1,7 @@
 namespace ExpenseManager_v2._0
 {
     using ExpenseManager_v2._0.Data;
+    using ExpenseManager_v2._0.Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -19,7 +20,7 @@ namespace ExpenseManager_v2._0
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options
+            services.AddDbContext<ExpenseManagerDbContext>(options => options
             .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services
@@ -33,7 +34,7 @@ namespace ExpenseManager_v2._0
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ExpenseManagerDbContext>();
 
             services
                 .AddControllersWithViews();
@@ -41,6 +42,9 @@ namespace ExpenseManager_v2._0
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.PrepareDatabase();
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -63,6 +67,8 @@ namespace ExpenseManager_v2._0
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });
+
+            
         }
     }
 }
