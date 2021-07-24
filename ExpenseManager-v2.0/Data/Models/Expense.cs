@@ -4,12 +4,15 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    using static DataConstants.Expense;
+
     public class Expense
     {
         [Key]
         public int Id { get; init; }
 
         [Required]
+        [MaxLength(NameMaxLength)]
         public string Name { get; set; }
 
         [DataType(DataType.Date)]
@@ -22,11 +25,7 @@
         [Column(TypeName = "decimal(10, 2)")]
         public decimal Amount { get; set; }
 
-        [Required]
         public string Notes { get; set; }
-
-        //[Required]
-        //public int UserId { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
 
         public int ExpenseCategoryId { get; set; }
         public ExpenseCategory ExpenseCategory { get; init; }

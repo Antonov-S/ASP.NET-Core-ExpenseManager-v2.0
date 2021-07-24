@@ -13,7 +13,7 @@ namespace ExpenseManager_v2._0
     public class Startup
     {
         public Startup(IConfiguration configuration) 
-            => Configuration = configuration;
+            => this.Configuration = configuration;
         
 
         public IConfiguration Configuration { get; }
@@ -21,7 +21,7 @@ namespace ExpenseManager_v2._0
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ExpenseManagerDbContext>(options => options
-            .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
             services
                 .AddDatabaseDeveloperPageExceptionFilter();

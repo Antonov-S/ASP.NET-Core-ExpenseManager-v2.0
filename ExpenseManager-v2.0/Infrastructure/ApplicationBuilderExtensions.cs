@@ -69,6 +69,8 @@
                 new IncomeCategory {Name = "Sales"},
                 new IncomeCategory {Name = "Others"},
             });
+
+            data.SaveChanges();
         }
     }
 }

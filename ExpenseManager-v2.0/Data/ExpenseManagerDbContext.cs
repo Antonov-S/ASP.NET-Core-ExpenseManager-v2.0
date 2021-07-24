@@ -32,6 +32,8 @@
                 .WithMany(c => c.Incomes)
                 .HasForeignKey(c => c.IncomeCategorysId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            base.OnModelCreating(builder);
         }
     }
 }
