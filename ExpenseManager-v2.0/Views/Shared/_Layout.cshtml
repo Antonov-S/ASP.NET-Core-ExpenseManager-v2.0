@@ -17,18 +17,30 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Income" asp-action="Add">Add Income</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Expense" asp-action="Add">Add Expense</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>                
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
+                            Manage Expense
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item text-dark" asp-controller="Expense" asp-action="Add">Add Expense</a>
+                            <a class="dropdown-item text-dark" asp-controller="Expense" asp-action="All">All Expenses</a>
+                        </div>
+                    </div>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
+                                Manage Incomes
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item text-dark" asp-controller="Income" asp-action="Add">Add Income</a>
+                                <a class="dropdown-item text-dark" asp-controller="Income" asp-action="All">All Incomes</a>
+                            </div>
+                        </div>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
             </div>
-        </nav>
+         </nav>
     </header>
     <div class="container">
         <main role="main" class="pb-3">

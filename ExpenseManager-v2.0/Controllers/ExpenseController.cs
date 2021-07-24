@@ -52,6 +52,25 @@
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult All()
+        {
+            var expense = this.data
+                .Expenses
+                .OrderByDescending(c => c.Id)
+                .Select(c => new ExpenseListingViewModel
+                {
+                    Id = c.Id, 
+                    Name = c.Name,
+                    ExpensDate = c.ExpenseDate.ToString("dd/MM/yyyy"),
+                    Amount = c.Amount,
+                    Notes = c.Notes,
+                    Category = c.ExpenseCategory.Name
+                })
+                .ToList();
+
+            return View(expense);
+        }
+
         private IEnumerable<ExpenseCategoryViewModel> GetExpenseCategories()
             => this.data
             .ExpenseCategories
