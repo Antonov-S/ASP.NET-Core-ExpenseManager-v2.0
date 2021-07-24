@@ -1,4 +1,4 @@
-﻿namespace ExpenseManager_v2._0.Models.Budget
+﻿namespace ExpenseManager_v2._0.Models.Income
 {
     public class IncomeCategoryViewModel
     {

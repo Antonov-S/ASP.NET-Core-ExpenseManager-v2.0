@@ -5,7 +5,7 @@
     using System.Linq;
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Data.Models;
-    using ExpenseManager_v2._0.Models.Budget;
+    using ExpenseManager_v2._0.Models.Expense;
     using Microsoft.AspNetCore.Mvc;
     
     public class ExpenseController : Controller
@@ -62,14 +62,6 @@
             })
             .ToList();
 
-        //private IEnumerable<IncomeCategoryViewModel> GetIncomeCategories()
-        //   => this.data
-        //   .IncomeCategories
-        //   .Select(c => new IncomeCategoryViewModel
-        //   {
-        //       Id = c.Id,
-        //       Name = c.Name
-        //   })
-        //   .ToList();
+       
     }
 }

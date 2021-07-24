@@ -18,7 +18,7 @@
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [Required]
-        public DateTime ExpenseDate { get; set; }
+        public DateTime IncomeDate { get; set; }
 
         [Required]
         [DataType(DataType.Currency)]
