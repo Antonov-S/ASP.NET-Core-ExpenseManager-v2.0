@@ -2,6 +2,7 @@ namespace ExpenseManager_v2._0
 {
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Infrastructure;
+    using ExpenseManager_v2._0.Services.Statistics;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -38,6 +39,9 @@ namespace ExpenseManager_v2._0
 
             services
                 .AddControllersWithViews();
+
+            services
+                .AddTransient<IStatisticsService, StatisticsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

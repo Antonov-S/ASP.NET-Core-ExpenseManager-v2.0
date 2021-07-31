@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Microsoft.AspNetCore.Identity;
 
     using static DataConstants.Income;
 
@@ -27,8 +28,10 @@
 
         public string Notes { get; set; }
 
-        [Required]
         public int IncomeCategorysId { get; set; }
         public IncomeCategory IncomeCategory { get; init; }
+
+        public string UserId { get; init; }
+        public ApplicationUser User { get; init; }
     }
 }

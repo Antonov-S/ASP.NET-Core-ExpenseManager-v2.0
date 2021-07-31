@@ -1,8 +1,50 @@
-﻿@{
-    ViewData["Title"] = "Online expense management";
+﻿@model IndexViewModel
+
+@{
+    ViewData["Title"] = "Welcome";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="mb-5"></div>
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-ld-10 offset-ld-2 col-xl-10 offset-xl-1">
+        <div>
+            <img src="~/images/Budget-Header.png" class="img-fluid" alt="Budget">
+        </div>
+
+        <div class="mb-5"></div>
+
+        <div class="row">
+            <div class="col-12 text-center">
+                <button class="btn btn-primary" id="statistics-button">Show Statistics</button>
+            </div>
+        </div>
+
+        <div class="jumbotron d-none" id="statistics">
+            <h1 class="display-4">Gain Control Over Your Money!</h1>
+            <p class="lead">
+                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary btn-lg" role="button">Register</a>
+            </p>
+            <hr class="my-4">
+            <div class="row">
+                <h1 class="col-md-6 text-center" id="total-transactions"></h1>
+                <h1 class="col-md-6 text-center" id="total-users"></h1>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        $('#statistics-button').on('click', ev => {
+            $.get('api/statistics', (data) => {
+                $('#total-transactions').text(data.totalTransactions + " Transactions");
+                $('#total-users').text(data.totalUsers + " Users");
+
+                $('#statistics').removeClass('d-none');
+                $('#statistics-button').hide();
+            });
+        });
+    </script>
+}
+

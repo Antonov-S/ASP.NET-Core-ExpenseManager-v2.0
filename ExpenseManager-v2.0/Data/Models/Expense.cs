@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Microsoft.AspNetCore.Identity;
 
     using static DataConstants.Expense;
 
@@ -29,5 +30,8 @@
 
         public int ExpenseCategoryId { get; set; }
         public ExpenseCategory ExpenseCategory { get; init; }
+
+        public string UserId { get; set; }
+        public ApplicationUser User { get; init; }
     }
 }

@@ -7,6 +7,8 @@
 
     public class AddExpenseFormModel
     {
+        public int Id { get; init; }
+        
         [Required]
         [StringLength(Expense.NameMaxLength, MinimumLength = Expense.NameMinLength)]
         public string Name { get; init; }

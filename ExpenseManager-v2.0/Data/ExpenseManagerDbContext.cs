@@ -16,6 +16,7 @@
         public DbSet<ExpenseCategory> ExpenseCategories { get; init; }
         public DbSet<Income> Incomes { get; init; }
         public DbSet<IncomeCategory> IncomeCategories { get; init; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; init; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -31,6 +32,20 @@
                 .HasOne(c => c.IncomeCategory)
                 .WithMany(c => c.Incomes)
                 .HasForeignKey(c => c.IncomeCategorysId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Expense>()
+                .HasOne(c => c.User)
+                .WithMany(c => c.Expenses)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Income>()
+                .HasOne(c => c.User)
+                .WithMany(c => c.Incomes)
+                .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

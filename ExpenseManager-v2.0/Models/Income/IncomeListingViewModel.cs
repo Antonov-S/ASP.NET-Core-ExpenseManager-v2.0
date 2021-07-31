@@ -1,12 +1,12 @@
-﻿namespace ExpenseManager_v2._0.Models.Expense
+﻿namespace ExpenseManager_v2._0.Models.Income
 {
-    public class ExpenseListingViewModel
+    public class IncomeListingViewModel
     {
         public int Id { get; init; }
 
         public string Name { get; init; }
 
-        public string ExpensDate { get; init; }
+        public string IncomeDate { get; init; }
 
         public decimal Amount { get; init; }
 

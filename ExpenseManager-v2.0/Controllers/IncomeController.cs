@@ -51,6 +51,24 @@
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult All()
+        {
+            var expense = this.data
+                .Incomes
+                .OrderByDescending(c => c.Id)
+                .Select(c => new IncomeListingViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    IncomeDate = c.IncomeDate.ToString("dd/MM/yyyy"),
+                    Amount = c.Amount,
+                    Category = c.IncomeCategory.Name
+                })
+                .ToList();
+
+            return View(expense);
+        }
+
         private IEnumerable<IncomeCategoryViewModel> GetIncomeCategories()
            => this.data
            .IncomeCategories
