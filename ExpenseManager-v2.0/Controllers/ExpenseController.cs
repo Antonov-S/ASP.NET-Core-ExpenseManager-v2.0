@@ -1,11 +1,13 @@
 ﻿namespace ExpenseManager_v2._0.Controllers
 {
     using System;
+    using System.Security.Claims;
     using System.Collections.Generic;
     using System.Linq;
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Data.Models;
     using ExpenseManager_v2._0.Models.Expense;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     public class ExpenseController : Controller
@@ -16,12 +18,14 @@
             this.data = data;
 
 
+        [Authorize]
         public IActionResult Add() => View(new AddExpenseFormModel
         {
             ExpenseCategories = this.GetExpenseCategories()
         });
 
         [HttpPost]
+        [Authorize]
         public IActionResult Add(AddExpenseFormModel expense)
         {
             if (!this.data.ExpenseCategories.Any(c => c.Id == expense.ExpenseCategoryId))
@@ -36,13 +40,21 @@
                 return View(expense);
             }
 
+            if (!this.UserHasRight())
+            {
+               return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             var expenseData = new Expense
             {
                 Name = expense.Name,
                 ExpenseDate = DateTime.Parse(expense.ExpensDate),
                 Amount = expense.Amount,
                 Notes = expense.Notes,
-                ExpenseCategoryId = expense.ExpenseCategoryId
+                ExpenseCategoryId = expense.ExpenseCategoryId,
+                UserId = userId
             };
 
             data.Add(expenseData);
@@ -52,10 +64,14 @@
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize]
         public IActionResult All()
         {
+            var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             var expense = this.data
                 .Expenses
+                .Where(c =>c.UserId == currentUserId)
                 .OrderByDescending(c => c.Id)
                 .Select(c => new ExpenseListingViewModel
                 {
@@ -70,6 +86,7 @@
             return View(expense);
         }
 
+        [Authorize]
         public ActionResult Details(int id)
         {
             var exists = this.data
@@ -96,6 +113,7 @@
             return View(detailedExpense);
         }
 
+        [Authorize]
         public IActionResult Edit(int id)
         {
             var exists = this.data
@@ -125,6 +143,7 @@
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Edit(DetailedExpenseViewModel editedExpense)
         {
             try
@@ -153,6 +172,11 @@
                 return View(editedExpense);
             }
         }
+
+        private bool UserHasRight()
+            => this.data
+            .Users
+            .Any(u => u.Id == this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
         private IEnumerable<ExpenseCategoryViewModel> GetExpenseCategories()
             => this.data

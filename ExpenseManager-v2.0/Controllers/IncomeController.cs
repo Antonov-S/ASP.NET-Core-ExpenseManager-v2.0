@@ -6,6 +6,7 @@
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Data.Models;
     using ExpenseManager_v2._0.Models.Income;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     
     public class IncomeController : Controller
@@ -15,12 +16,14 @@
         public IncomeController(ExpenseManagerDbContext data) =>
             this.data = data;
 
+        [Authorize]
         public IActionResult Add() => View(new AddIncomeFormModel
         {
             IncomeCategories = this.GetIncomeCategories()
         });
 
         [HttpPost]
+        [Authorize]
         public IActionResult Add(AddIncomeFormModel income)
         {
             if (!this.data.IncomeCategories.Any(c => c.Id == income.IncomeCategoryId))

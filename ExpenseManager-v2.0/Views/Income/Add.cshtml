@@ -1,7 +1,7 @@
 ﻿@model AddIncomeFormModel
 
 @{
-    ViewData["Title"] = "Add Income";
+    ViewBag.Title = "Add Income";
 }
 
 <div class="row">
@@ -40,7 +40,7 @@
                 <span asp-validation-for="IncomeCategoryId" class="small text-danger"></span>
             </div>
 
-            <input class="btn btn-primary float-left" type="submit" value="Save" />
+            <input class="btn btn-primary float-left mt-3" type="submit" value="Save" />
         </form>
     </div>
 </div>

@@ -1,10 +1,18 @@
 ﻿@model IEnumerable<ExpenseListingViewModel>
 
 @{
-    ViewData["Title"] = "All";
+    ViewBag.Title = "All";
 }
 
-<h1>All Expenses</h1>
+
+@if (!Model.Any())
+{
+<h2 class="text-center">No expenses found.</h2>
+}
+else
+{
+<h1 class="text-center">All Expenses</h1>
+}
 <hr />
 <p>
     <a asp-action="Add" class="btn btn-success"> <i class="fa fa-plus" aria-hidden="true"></i> Add New</a>

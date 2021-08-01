@@ -1,12 +1,12 @@
 ﻿@model AddExpenseFormModel
 
 @{ 
-    ViewData["Title"] = "Add Expense";
+    ViewBag.Title = "Add Expense";
 }
 
 <div class="row"> 
     <div class="col-sm-12 offset-lg-2 col-ld-8 offset-ld-3 col-xl-6">
-        <h2 class="heading-margin text-center">Add Payment</h2>
+        <h2 class="heading-margin text-center">@ViewBag.Title</h2>
 
         <form method="post">
             <div class="form-group">
@@ -40,7 +40,7 @@
                 <span asp-validation-for="ExpenseCategoryId" class="small text-danger"></span>
             </div>
 
-            <input class="btn btn-primary float-left" type="submit" value="Save" />
+            <input class="btn btn-primary float-left mt-3" type="submit" value="Save" />
         </form>
     </div>
 </div>
