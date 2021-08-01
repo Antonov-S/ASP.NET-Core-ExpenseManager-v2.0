@@ -6,6 +6,7 @@ namespace ExpenseManager_v2._0
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +39,10 @@ namespace ExpenseManager_v2._0
                 .AddEntityFrameworkStores<ExpenseManagerDbContext>();
 
             services
-                .AddControllersWithViews();
+                .AddControllersWithViews(options =>
+                {
+                    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                });
 
             services
                 .AddTransient<IStatisticsService, StatisticsService>();
