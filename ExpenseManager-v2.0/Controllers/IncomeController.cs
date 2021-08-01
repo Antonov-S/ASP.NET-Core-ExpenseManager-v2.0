@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Claims;
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Data.Models;
     using ExpenseManager_v2._0.Models.Income;
@@ -38,13 +39,21 @@
                 return View(income);
             }
 
+            if (!this.UserHasRight())
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+
+            var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             var incomeData = new Income
             {
                 Name = income.Name,
                 IncomeDate = DateTime.Parse(income.IncomeDate),
                 Amount = income.Amount,
                 Notes = income.Notes,
-                IncomeCategorysId = income.IncomeCategoryId
+                IncomeCategorysId = income.IncomeCategoryId,
+                UserId = currentUserId
             };
 
             data.Add(incomeData);
@@ -54,10 +63,14 @@
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize]
         public IActionResult All()
         {
+            var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             var expense = this.data
                 .Incomes
+                .Where(c => c.UserId == currentUserId)
                 .OrderByDescending(c => c.Id)
                 .Select(c => new IncomeListingViewModel
                 {
@@ -71,6 +84,11 @@
 
             return View(expense);
         }
+
+        private bool UserHasRight()
+            => this.data
+            .Users
+            .Any(u => u.Id == this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
         private IEnumerable<IncomeCategoryViewModel> GetIncomeCategories()
            => this.data
