@@ -1,14 +1,14 @@
-﻿namespace ExpenseManager_v2._0.Models.Expense
+﻿namespace ExpenseManager_v2._0.Services.Expense
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using static Data.DataConstants;
 
-    public class AddExpenseFormModel
+    public class AddExpenseServiceModel
     {
         public int Id { get; init; }
-        
+
         [Required]
         [StringLength(Expense.NameMaxLength, MinimumLength = Expense.NameMinLength)]
         public string Name { get; init; }
@@ -22,15 +22,15 @@
         public decimal Amount { get; init; }
 
         [Required]
-        [StringLength(Expense.NotesMaxLength, 
+        [StringLength(Expense.NotesMaxLength,
             MinimumLength = Expense.NotesMinLength,
             ErrorMessage = "The field must be with a minimum length of {2}")]
         public string Notes { get; init; }
 
-        
+
         [Display(Name = "Category")]
         public int ExpenseCategoryId { get; init; }
 
-        public IEnumerable<ExpenseCategoryViewModel> ExpenseCategories { get; set; }        
+        public IEnumerable<ExpenseCategoryServicesModel> ExpenseCategories { get; set; }
     }
 }

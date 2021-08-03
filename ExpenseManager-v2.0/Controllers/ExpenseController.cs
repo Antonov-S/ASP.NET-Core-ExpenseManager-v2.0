@@ -1,32 +1,35 @@
 ﻿namespace ExpenseManager_v2._0.Controllers
 {
     using System;
-    using System.Security.Claims;
-    using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Claims;
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Data.Models;
     using ExpenseManager_v2._0.Models.Expense;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using ExpenseManager_v2._0.Services.Expense;
 
     public class ExpenseController : Controller
     {
         private readonly ExpenseManagerDbContext data;
+        private readonly IExpenseService expenseService;
 
-        public ExpenseController(ExpenseManagerDbContext data) =>
+        public ExpenseController(ExpenseManagerDbContext data,
+            IExpenseService expenseService)
+        { 
             this.data = data;
+            this.expenseService = expenseService;
+        }
 
 
         [Authorize]
-        public IActionResult Add() => View(new AddExpenseFormModel
-        {
-            ExpenseCategories = this.GetExpenseCategories()
-        });
+        public IActionResult Add()
+            => View(expenseService.GETAdd());
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddExpenseFormModel expense)
+        public IActionResult Add(AddExpenseServiceModel expense)
         {
             if (!this.data.ExpenseCategories.Any(c => c.Id == expense.ExpenseCategoryId))
             {
@@ -35,31 +38,14 @@
 
             if (!ModelState.IsValid)
             {
-                expense.ExpenseCategories = this.GetExpenseCategories();
+                expense.ExpenseCategories = this.expenseService.GetExpenseCategories();
 
                 return View(expense);
             }
-
-            if (!this.UserHasRight())
-            {
-               return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
-
+            
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var expenseData = new Expense
-            {
-                Name = expense.Name,
-                ExpenseDate = DateTime.Parse(expense.ExpensDate),
-                Amount = expense.Amount,
-                Notes = expense.Notes,
-                ExpenseCategoryId = expense.ExpenseCategoryId,
-                UserId = userId
-            };
-
-            data.Add(expenseData);
-            data.SaveChanges();
-
+            expenseService.POSTAdd(expense, userId);
 
             return RedirectToAction("Index", "Home");
         }
@@ -69,21 +55,9 @@
         {
             var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var expense = this.data
-                .Expenses
-                .Where(c =>c.UserId == currentUserId)
-                .OrderByDescending(c => c.Id)
-                .Select(c => new ExpenseListingViewModel
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    ExpensDate = c.ExpenseDate.ToString("dd/MM/yyyy"),
-                    Amount = c.Amount,
-                    Category = c.ExpenseCategory.Name
-                })
-                .ToList();
+            var expensesForThisUser = this.expenseService.All(currentUserId);
 
-            return View(expense);
+            return View(expensesForThisUser);
         }
 
         [Authorize]
@@ -172,21 +146,6 @@
                 return View(editedExpense);
             }
         }
-
-        private bool UserHasRight()
-            => this.data
-            .Users
-            .Any(u => u.Id == this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-        private IEnumerable<ExpenseCategoryViewModel> GetExpenseCategories()
-            => this.data
-            .ExpenseCategories
-            .Select(c => new ExpenseCategoryViewModel
-            {
-                Id = c.Id,
-                Name = c.Name
-            })
-            .ToList();
 
     }
 }

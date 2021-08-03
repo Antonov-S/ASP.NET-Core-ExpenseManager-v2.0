@@ -1,9 +1,6 @@
 ﻿namespace ExpenseManager_v2._0.Controllers
 {
-    using System.Diagnostics;
-    using System.Linq;
     using ExpenseManager_v2._0.Data;
-    using ExpenseManager_v2._0.Models;
     using ExpenseManager_v2._0.Models.Home;
     using ExpenseManager_v2._0.Services.Statistics;
     using Microsoft.AspNetCore.Mvc;
