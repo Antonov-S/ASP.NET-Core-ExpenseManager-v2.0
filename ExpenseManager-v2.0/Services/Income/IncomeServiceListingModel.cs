@@ -1,6 +1,6 @@
-﻿namespace ExpenseManager_v2._0.Models.Income
+﻿namespace ExpenseManager_v2._0.Services.Income
 {
-    public class IncomeListingViewModel
+    public class IncomeServiceListingModel
     {
         public int Id { get; init; }
 
@@ -11,5 +11,7 @@
         public decimal Amount { get; init; }
 
         public string Category { get; init; }
+
+        public string UserId { get; init; }
     }
 }

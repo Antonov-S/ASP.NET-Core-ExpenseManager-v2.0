@@ -1,13 +1,14 @@
-﻿namespace ExpenseManager_v2._0.Models.Income
+﻿namespace ExpenseManager_v2._0.Services.Income
 {
-    using ExpenseManager_v2._0.Models.Income;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using static Data.DataConstants;
 
-    public class AddIncomeFormModel
+    public class AddIncomeServiceModel
     {
+        public int Id { get; init; }
+
         [Required]
         [StringLength(Income.NameMaxLength, MinimumLength = Income.NameMinLength)]
         public string Name { get; init; }
@@ -21,7 +22,7 @@
         public decimal Amount { get; init; }
 
         [Required]
-        [StringLength(Expense.NotesMaxLength,
+        [StringLength(Income.NotesMaxLength,
             MinimumLength = Income.NotesMinLength,
             ErrorMessage = "The field must be with a minimum length of {2}")]
         public string Notes { get; init; }
@@ -30,6 +31,6 @@
         [Display(Name = "Category")]
         public int IncomeCategoryId { get; init; }
 
-        public IEnumerable<IncomeCategoryViewModel> IncomeCategories { get; set; }
+        public IEnumerable<IncomeCategoryServicesModel> IncomeCategories { get; set; }
     }
 }

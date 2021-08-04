@@ -8,13 +8,9 @@
     public class HomeController : Controller
     {
         private readonly IStatisticsService statistics;
-        private readonly ExpenseManagerDbContext data;
 
         public HomeController(IStatisticsService statistics, ExpenseManagerDbContext data)
-        {
-            this.statistics = statistics;
-            this.data = data;        
-        }
+            => this.statistics = statistics;
 
         public IActionResult Index()
         {

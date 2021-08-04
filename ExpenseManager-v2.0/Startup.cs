@@ -3,6 +3,7 @@ namespace ExpenseManager_v2._0
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Infrastructure;
     using ExpenseManager_v2._0.Services.Expense;
+    using ExpenseManager_v2._0.Services.Income;
     using ExpenseManager_v2._0.Services.Statistics;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -50,6 +51,9 @@ namespace ExpenseManager_v2._0
 
             services
                 .AddTransient<IExpenseService, ExpenseService>();
+
+            services
+                .AddTransient<IIncomeService, IncomeService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
