@@ -4,7 +4,9 @@
     using ExpenseManager_v2._0.Services.Income;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    
+    using ExpenseManager_v2._0.Infrastructure;
+
+
     public class IncomeController : Controller
     {
         private readonly IIncomeService incomeService;
@@ -48,6 +50,57 @@
             var incomesForThisUser = this.incomeService.All(currentUserId);
 
             return View(incomesForThisUser);
+        }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = this.User.GetId();
+
+            var incomeToBeEdited = this.incomeService.Details(id);
+
+            if (incomeToBeEdited.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            return View(new AddIncomeServiceModel
+            {
+                Id = incomeToBeEdited.Id,
+                Name = incomeToBeEdited.Name,
+                IncomeDate = incomeToBeEdited.IncomeDate,
+                Amount = incomeToBeEdited.Amount,
+                Notes = incomeToBeEdited.Notes,
+                IncomeCategoryId = incomeToBeEdited.IncomeCategoryId,
+                IncomeCategories = this.incomeService.GetIncomeCategories()
+            });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, AddIncomeServiceModel incomeToBeEdited)
+        {
+            if (!incomeService.IsIncomeCategoryExist(incomeToBeEdited))
+            {
+                this.ModelState.AddModelError(nameof(incomeToBeEdited.IncomeCategoryId), "Category does not exist.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                incomeToBeEdited.IncomeCategories = this.incomeService.GetIncomeCategories();
+
+                return View(incomeToBeEdited);
+            }
+
+            this.incomeService.Edit(
+                id,
+                incomeToBeEdited.Name,
+                incomeToBeEdited.IncomeDate,
+                incomeToBeEdited.Amount,
+                incomeToBeEdited.Notes,
+                incomeToBeEdited.IncomeCategoryId);
+
+            return RedirectToAction(nameof(All));
         }
 
     }

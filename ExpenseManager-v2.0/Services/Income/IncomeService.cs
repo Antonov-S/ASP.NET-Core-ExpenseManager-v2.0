@@ -57,6 +57,47 @@
             return incomes;
         }
 
+        public IncomeDetailsServiceModel Details(int incomeId)
+            => this.data
+              .Incomes
+              .Where(c => c.Id == incomeId)
+              .Select(c => new IncomeDetailsServiceModel
+              {
+                  Id = c.Id,
+                  Name = c.Name,
+                  IncomeDate = c.IncomeDate.ToString("dd/MM/yyyy"),
+                  Amount = c.Amount,
+                  Notes = c.Notes,
+                  IncomeCategoryId = c.IncomeCategorysId,                  
+                  UserId = c.UserId
+              })
+              .FirstOrDefault();
+
+        public bool Edit(int id,
+            string name,
+            string incomeDate,
+            decimal amount,
+            string notes,
+            int incomeCategoryId)
+        {
+            var editedData = this.data.Incomes.Find(id);
+
+            if (editedData == null)
+            {
+                return false;
+            }
+
+            editedData.Name = name;
+            editedData.IncomeDate = DateTime.Parse(incomeDate);
+            editedData.Amount = amount;
+            editedData.Notes = notes;
+            editedData.IncomeCategorysId = incomeCategoryId;
+
+            this.data.SaveChanges();
+
+            return true;
+        }
+
         public IEnumerable<IncomeCategoryServicesModel> GetIncomeCategories()
                 => this.data
                .IncomeCategories
@@ -69,5 +110,6 @@
 
         public bool IsIncomeCategoryExist(AddIncomeServiceModel income)
             => data.IncomeCategories.Any(c => c.Id == income.IncomeCategoryId);
+
     }
 }
