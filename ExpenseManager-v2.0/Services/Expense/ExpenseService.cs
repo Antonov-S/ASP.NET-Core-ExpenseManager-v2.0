@@ -57,6 +57,46 @@
             return expenses;
         }
 
+        public ExpenseDetailsServiceModel Details(int expenseId)
+            => this.data
+              .Expenses
+              .Where(c => c.Id == expenseId)
+              .Select(c => new ExpenseDetailsServiceModel
+              {
+                  Id = c.Id,
+                  Name = c.Name,
+                  ExpensDate = c.ExpenseDate.ToString("dd/MM/yyyy"),
+                  Amount = c.Amount,
+                  Notes = c.Notes,
+                  ExpenseCategoryId = c.ExpenseCategoryId,
+                  UserId = c.UserId
+              })
+              .FirstOrDefault();
+
+        public bool Edit(int id, string name, string expensDate, decimal amount, string notes, int expensCategoryId)
+        {
+            var editedData = this.data.Expenses.Find(id);
+
+            if (editedData == null)
+            {
+                return false;
+            }
+
+            editedData.Name = name;
+            editedData.ExpenseDate = DateTime.Parse(expensDate);
+            editedData.Amount = amount;
+            editedData.Notes = notes;
+            editedData.ExpenseCategoryId = expensCategoryId;
+
+            this.data.SaveChanges();
+
+            return true;
+        }
+
+        public bool IsExpenseCategoryExist(AddExpenseServiceModel expenseToBeChacked)
+            => data.ExpenseCategories.Any(c => c.Id == expenseToBeChacked.ExpenseCategoryId);
+
+
         public IEnumerable<ExpenseCategoryServicesModel> GetExpenseCategories()
             => this.data
             .ExpenseCategories
@@ -66,7 +106,5 @@
                 Name = c.Name
             })
             .ToList();
-
-        
     }
 }

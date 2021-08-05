@@ -1,14 +1,13 @@
 ﻿namespace ExpenseManager_v2._0.Controllers
 {
-    using System;
     using System.Linq;
     using System.Security.Claims;
-    using ExpenseManager_v2._0.Data;
-    using ExpenseManager_v2._0.Data.Models;
-    using ExpenseManager_v2._0.Models.Expense;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using ExpenseManager_v2._0.Data;
+    using ExpenseManager_v2._0.Models.Expense;    
     using ExpenseManager_v2._0.Services.Expense;
+    using ExpenseManager_v2._0.Infrastructure;
 
     public class ExpenseController : Controller
     {
@@ -90,60 +89,59 @@
         [Authorize]
         public IActionResult Edit(int id)
         {
-            var exists = this.data
-                .Expenses
-                .Any(q => q.Id == id);
+            var userId = this.User.GetId();
 
-            if (!exists)
+            var expenseToBeEdited = this.expenseService.Details(id);
+
+            if (expenseToBeEdited.UserId != userId)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            var editedExpense = data.Expenses
-                .Where(e => e.Id == id)
-                .Select(x => new DetailedExpenseViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    ExpensDate = x.ExpenseDate.ToString("dd/MM/yyyy"),
-                    Amount = x.Amount,
-                    Notes = x.Notes,
-                    ExpenseCategoryId = x.ExpenseCategoryId,
-                    Category = x.ExpenseCategory.Name,
-                })
-                .FirstOrDefault();
-
-            return View(editedExpense);
+            return View(new AddExpenseServiceModel
+            {
+                Id = expenseToBeEdited.Id,
+                Name = expenseToBeEdited.Name,
+                ExpensDate = expenseToBeEdited.ExpensDate,
+                Amount = expenseToBeEdited.Amount,
+                Notes = expenseToBeEdited.Notes,
+                ExpenseCategoryId = expenseToBeEdited.ExpenseCategoryId,
+                ExpenseCategories = this.expenseService.GetExpenseCategories()
+            });
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Edit(DetailedExpenseViewModel editedExpense)
+        public IActionResult Edit(int id, AddExpenseServiceModel expenseToBeEdited)
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (!expenseService.IsExpenseCategoryExist(expenseToBeEdited))
                 {
-                    return View(editedExpense);
+                    this.ModelState.AddModelError(nameof(expenseToBeEdited.ExpenseCategoryId), "Category does not exist.");
                 }
 
-                var uppdatedExpense = new Expense
+                if (!ModelState.IsValid)
                 {
-                    Id = editedExpense.Id,
-                    ExpenseDate = DateTime.Parse(editedExpense.ExpensDate),
-                    Amount = editedExpense.Amount,
-                    Notes = editedExpense.Notes,
-                    ExpenseCategoryId = editedExpense.ExpenseCategory.Id
-                };
+                    expenseToBeEdited.ExpenseCategories = this.expenseService.GetExpenseCategories();
 
-                data.Expenses.Update(uppdatedExpense);
-                
+                    return View(expenseToBeEdited);
+                }
+
+                this.expenseService.Edit(
+                    id,
+                    expenseToBeEdited.Name,
+                    expenseToBeEdited.ExpensDate,
+                    expenseToBeEdited.Amount,
+                    expenseToBeEdited.Notes,
+                    expenseToBeEdited.ExpenseCategoryId);
+
                 return RedirectToAction(nameof(All));
             }
             catch
             {
                 ModelState.AddModelError("", "Something Went Wrong...");
-                return View(editedExpense);
+                return View(expenseToBeEdited);
             }
         }
 

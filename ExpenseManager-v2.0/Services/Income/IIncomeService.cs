@@ -9,7 +9,7 @@
         void POSTAdd(AddIncomeServiceModel addServiceModel,
             string userId);
         IEnumerable<IncomeServiceListingModel> All(string userId);
-        IncomeDetailsServiceModel Details(int carId);
+        IncomeDetailsServiceModel Details(int incomeId);
 
         bool Edit(
             int id,
