@@ -25,7 +25,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <div class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
-                            Manage Expenses
+                            Expenses
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item text-dark" asp-controller="Expense" asp-action="Add">Add Expense</a>
@@ -35,16 +35,24 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
-                                Manage Incomes
+                                Incomes
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item text-dark" asp-controller="Income" asp-action="Add">Add Income</a>
                                 <a class="dropdown-item text-dark" asp-controller="Income" asp-action="All">All Incomes</a>
                             </div>
                         </div>
-                        <partial name="_LoginPartial" />
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
+                            Credits
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item text-dark" asp-controller="Credit" asp-action="Add">Add Credit</a>
+                        </div>
                     </div>
                 </div>
+                <partial name="_LoginPartial" />
             </div>
          </nav>
     </header>

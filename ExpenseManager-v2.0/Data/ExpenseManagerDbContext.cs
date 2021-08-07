@@ -17,6 +17,7 @@
         public DbSet<Income> Incomes { get; init; }
         public DbSet<IncomeCategory> IncomeCategories { get; init; }
         public DbSet<ApplicationUser> ApplicationUsers { get; init; }
+        public DbSet<Credit> Credits { get; init; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -45,6 +46,13 @@
                 .Entity<Income>()
                 .HasOne(c => c.User)
                 .WithMany(c => c.Incomes)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Credit>()
+                .HasOne(c => c.User)
+                .WithMany(c => c.Credits)
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 

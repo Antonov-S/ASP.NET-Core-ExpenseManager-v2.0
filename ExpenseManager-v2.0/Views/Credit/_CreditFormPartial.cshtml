@@ -1,0 +1,48 @@
+﻿@model AddCreditServiceModel
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-ld-8 offset-ld-3 col-xl-6">
+        <h2 class="heading-margin text-center">Add Credit</h2>
+
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" class="form-control" placeholder="Example: Loan in Raiffeisen Bank">
+                <span asp-validation-for="Name" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AmountOfMonthlyInstallment">Amount of Monthly Installment</label>
+                <input asp-for="AmountOfMonthlyInstallment" class="form-control" placeholder="120">
+                <span asp-validation-for="AmountOfMonthlyInstallment" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberOfInstallmentsRemaining">Number Of Installments Remaining</label>
+                <input asp-for="NumberOfInstallmentsRemaining" class="form-control" placeholder="Example: 16">
+                <span asp-validation-for="NumberOfInstallmentsRemaining" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UnpaidFees">Unpaid fees</label>
+                <input asp-for="UnpaidFees" class="form-control" placeholder="60"></input>
+                <span asp-validation-for="UnpaidFees" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaturityDate">Maturity date</label>
+                <input asp-for="MaturityDate" class="form-control" placeholder="@DateTime.UtcNow.ToString("dd/MM/yyyy")">
+                <span asp-validation-for="MaturityDate" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Total">Total</label>
+                <input asp-for="Total" class="form-control" placeholder="The full amount of the loan with all fees and interest included. ">
+                <span asp-validation-for="Total" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes">Notes</label>
+                <textarea asp-for="Notes" rows="4" class="form-control" placeholder="It can be easy to lose sight of your budget, so add notes..."></textarea>
+                <span asp-validation-for="Notes" class="small text-danger"></span>
+            </div>
+            <input style='margin-right:16px' class="btn btn-primary float-left mt-3" type="submit" value="Save" />
+            <a asp-action="All" style='margin-right:16px' class="btn btn-dark float-left mt-3">Back</a>
+        </form>
+    </div>
+</div>
+

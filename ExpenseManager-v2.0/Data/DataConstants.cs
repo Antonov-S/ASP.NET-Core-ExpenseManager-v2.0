@@ -1,6 +1,6 @@
 ﻿namespace ExpenseManager_v2._0.Data
 {
-    public class DataConstants
+    public static class DataConstants
     {
         public class Expense
         {
@@ -24,6 +24,15 @@
         {
             public const int NameMinLength = 3;
             public const int NameMaxLength = 50;
+        }
+
+        public class Credit
+        {
+            public const int NameMinLength = 3;
+            public const int NameMaxLength = 50;
+
+            public const int NotesMinLength = 10;
+            public const int NotesMaxLength = 300;
         }
     }
 }

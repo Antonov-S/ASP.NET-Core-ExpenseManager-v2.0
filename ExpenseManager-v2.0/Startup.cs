@@ -2,6 +2,7 @@ namespace ExpenseManager_v2._0
 {
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Infrastructure;
+    using ExpenseManager_v2._0.Services.Credit;
     using ExpenseManager_v2._0.Services.Expense;
     using ExpenseManager_v2._0.Services.Income;
     using ExpenseManager_v2._0.Services.Statistics;
@@ -54,6 +55,9 @@ namespace ExpenseManager_v2._0
 
             services
                 .AddTransient<IIncomeService, IncomeService>();
+
+            services
+                .AddTransient<ICreditService, CreditService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

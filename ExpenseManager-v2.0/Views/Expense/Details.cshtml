@@ -4,53 +4,42 @@
     ViewBag.Title = "Details";
 }
 
-<h1>Details</h1>
+<h1 class="text-center">Details</h1>
 
 <div>
-
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
+    <div class="col-sm-12 offset-lg-2 col-ld-8 offset-ld-3 col-xl-6">
+        <hr />
+        <dt class="col-6 text-truncate">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-6 text-truncate">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-6 text-truncate">
             @Html.DisplayNameFor(model => model.ExpensDate)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-6 text-truncate">
             @Html.DisplayFor(model => model.ExpensDate)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-6 text-truncate">
             @Html.DisplayNameFor(model => model.Amount)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-6 text-truncate">
             @Html.DisplayFor(model => model.Amount)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-12 text-truncate">
             @Html.DisplayNameFor(model => model.Notes)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-12 text-truncate">
             @Html.DisplayFor(model => model.Notes)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-6 text-truncate">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-6 text-truncate">
             @Html.DisplayFor(model => model.Category)
         </dd>
-    </dl>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-block">Edit</a>
-    </div>
-</div>
-<br>
-<div class="row">
-    <div class="col-md-4">
-        <a asp-action="All" class="btn btn-secondary btn-block">Back to List</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" style='margin-right:16px' class="btn btn-warning float-left mt-3">Edit</a>
+        <a asp-action="All" style='margin-right:16px' class="btn btn-dark float-left mt-3">Back</a>
     </div>
 </div>

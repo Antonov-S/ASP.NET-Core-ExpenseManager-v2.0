@@ -1,6 +1,5 @@
 ﻿namespace ExpenseManager_v2._0.Controllers
 {
-    using System.Security.Claims;
     using ExpenseManager_v2._0.Services.Income;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -35,7 +34,7 @@
                 return View(income);
             }
 
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = this.User.GetId();
 
             incomeService.POSTAdd(income, userId);
 
@@ -45,7 +44,7 @@
         [Authorize]
         public IActionResult All()
         {
-            var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUserId = this.User.GetId();
 
             var incomesForThisUser = this.incomeService.All(currentUserId);
 
