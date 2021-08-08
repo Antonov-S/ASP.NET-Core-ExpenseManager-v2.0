@@ -114,8 +114,7 @@
         [Authorize]
         public IActionResult Edit(int id, AddExpenseServiceModel expenseToBeEdited)
         {
-            try
-            {
+            
                 if (!expenseService.IsExpenseCategoryExist(expenseToBeEdited))
                 {
                     this.ModelState.AddModelError(nameof(expenseToBeEdited.ExpenseCategoryId), "Category does not exist.");
@@ -128,7 +127,7 @@
                     return View(expenseToBeEdited);
                 }
 
-                this.expenseService.Edit(
+                var edited = this.expenseService.Edit(
                     id,
                     expenseToBeEdited.Name,
                     expenseToBeEdited.ExpensDate,
@@ -136,13 +135,13 @@
                     expenseToBeEdited.Notes,
                     expenseToBeEdited.ExpenseCategoryId);
 
+                if (!edited)
+                {
+                    return BadRequest();
+                }
+
                 return RedirectToAction(nameof(All));
-            }
-            catch
-            {
-                ModelState.AddModelError("", "Something Went Wrong...");
-                return View(expenseToBeEdited);
-            }
+            
         }
 
     }

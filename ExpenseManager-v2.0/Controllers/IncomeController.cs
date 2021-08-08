@@ -91,13 +91,18 @@
                 return View(incomeToBeEdited);
             }
 
-            this.incomeService.Edit(
+            var edited = this.incomeService.Edit(
                 id,
                 incomeToBeEdited.Name,
                 incomeToBeEdited.IncomeDate,
                 incomeToBeEdited.Amount,
                 incomeToBeEdited.Notes,
                 incomeToBeEdited.IncomeCategoryId);
+
+            if (!edited)
+            {
+                return BadRequest();
+            }
 
             return RedirectToAction(nameof(All));
         }
