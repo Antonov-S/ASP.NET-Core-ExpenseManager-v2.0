@@ -68,7 +68,7 @@
                   AmountOfMonthlyInstallment = c.AmountOfMonthlyInstallment,
                   NumberOfInstallmentsRemaining = c.NumberOfInstallmentsRemaining,
                   UnpaidFees = c.UnpaidFees,
-                  MaturityDate = c.MaturityDate.ToString("dd/MM/yyyy"),
+                  MaturityDate = c.MaturityDate.ToString("dd"),
                   Total = c.Total,
                   Notes = c.Notes,
                   UserId = c.UserId
@@ -103,5 +103,10 @@
 
             return true;
         }
+
+        public bool IsCreditExist(int creditId)
+            => data
+            .Credits
+            .Any(e => e.Id == creditId);
     }
 }

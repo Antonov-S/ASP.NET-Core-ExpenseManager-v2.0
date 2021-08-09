@@ -3,5 +3,6 @@
     public class IncomeDetailsServiceModel : AddIncomeServiceModel
     {
         public string UserId { get; init; }
+        public string Categorie { get; init; }
     }
 }

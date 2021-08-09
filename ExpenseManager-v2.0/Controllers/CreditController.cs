@@ -92,5 +92,20 @@
 
             return RedirectToAction(nameof(All));
         }
+
+        [Authorize]
+        public ActionResult Details(int id)
+        {
+            var exists = creditService.IsCreditExist(id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var detailedExpense = creditService.Details(id);
+
+            return View(detailedExpense);
+        }
     }
 }

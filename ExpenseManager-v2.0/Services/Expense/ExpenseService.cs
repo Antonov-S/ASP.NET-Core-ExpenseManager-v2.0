@@ -61,13 +61,9 @@
         {
             if (IsExpenseExist(expenseId))
             {
-                var expenseCategoryId = this.data
-                .Expenses
-                .Where(x => x.Id == expenseId)
-                .Select(c => c.ExpenseCategoryId)
-                .FirstOrDefault();
+                var expenseCategoryId = GetCategoryId(expenseId);
 
-                var categorieName = this.GetCategorieName(expenseCategoryId);
+                var categorieName = GetCategorieName(expenseCategoryId);
 
                var details = this.data
                     .Expenses
@@ -90,7 +86,7 @@
             else
             {
                 return null;
-            }         
+            }      
             
         }
 
@@ -141,6 +137,13 @@
             .Select (c => c.Name)
             .FirstOrDefault()
             .ToString();
+
+        public int GetCategoryId(int expenseId)
+            => this.data
+                .Expenses
+                .Where(x => x.Id == expenseId)
+                .Select(c => c.ExpenseCategoryId)
+                .FirstOrDefault();
 
 
     }

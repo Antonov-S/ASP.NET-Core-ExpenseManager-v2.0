@@ -22,5 +22,7 @@
             string maturityDate,
             decimal total,
             string notes);
+
+        public bool IsCreditExist(int creditId);
     }
 }

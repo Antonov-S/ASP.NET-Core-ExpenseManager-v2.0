@@ -58,20 +58,37 @@
         }
 
         public IncomeDetailsServiceModel Details(int incomeId)
-            => this.data
-              .Incomes
-              .Where(c => c.Id == incomeId)
-              .Select(c => new IncomeDetailsServiceModel
-              {
-                  Id = c.Id,
-                  Name = c.Name,
-                  IncomeDate = c.IncomeDate.ToString("dd/MM/yyyy"),
-                  Amount = c.Amount,
-                  Notes = c.Notes,
-                  IncomeCategoryId = c.IncomeCategorysId,                  
-                  UserId = c.UserId
-              })
-              .FirstOrDefault();
+        {
+            if (IsincomeExist(incomeId))
+            {
+                var incomeCategoryId = GetCategoryId(incomeId);
+
+                var categorieName = GetCategorieName(incomeCategoryId);
+
+                var details = this.data
+                     .Incomes
+                     .Where(c => c.Id == incomeId)
+                     .Select(c => new IncomeDetailsServiceModel
+                     {
+                         Id = c.Id,
+                         Name = c.Name,
+                         IncomeDate = c.IncomeDate.ToString("dd/MM/yyyy"),
+                         Amount = c.Amount,
+                         Notes = c.Notes,
+                         IncomeCategoryId = c.IncomeCategorysId,
+                         UserId = c.UserId,
+                         Categorie = categorieName
+                     })
+                     .FirstOrDefault();
+
+                return details;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
 
         public bool Edit(int id,
             string name,
@@ -111,5 +128,24 @@
         public bool IsIncomeCategoryExist(AddIncomeServiceModel income)
             => data.IncomeCategories.Any(c => c.Id == income.IncomeCategoryId);
 
+        public bool IsincomeExist(int incomeId)
+            => data
+            .Incomes
+            .Any(e => e.Id == incomeId);
+
+        public int GetCategoryId(int incomeId)
+            => this.data
+                .Incomes
+                .Where(x => x.Id == incomeId)
+                .Select(c => c.IncomeCategorysId)
+                .FirstOrDefault();
+
+        public string GetCategorieName(int incomeCategoryId)
+            => this.data
+            .IncomeCategories
+            .Where(c => c.Id == incomeCategoryId)
+            .Select(c => c.Name)
+            .FirstOrDefault()
+            .ToString();
     }
 }

@@ -107,5 +107,25 @@
             return RedirectToAction(nameof(All));
         }
 
+        [Authorize]
+        public ActionResult Details(int id)
+        {
+            var exists = incomeService.IsincomeExist(id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var detailedIncome = incomeService.Details(id);
+
+            if (detailedIncome.Categorie == null)
+            {
+                this.ModelState.AddModelError(nameof(detailedIncome.Categorie), "Category name is missing ;(.");
+            }
+
+            return View(detailedIncome);
+        }
+
     }
 }

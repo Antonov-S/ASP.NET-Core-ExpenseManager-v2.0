@@ -1,9 +1,9 @@
-﻿@model ExpenseManager_v2._0.Services.Expense.ExpenseDetailsServiceModel
+﻿@model ExpenseManager_v2._0.Services.Income.IncomeDetailsServiceModel
 
 @{
     ViewBag.Title = "Details";
-}   
-    
+}
+
 <div class="col-sm-12 offset-lg-2 col-ld-8 offset-ld-3 col-xl-6">
     <h2 class="heading-margin text-center">@ViewBag.Title</h2>
     <ul class="list-group">
@@ -12,8 +12,8 @@
             <span>@Html.DisplayFor(model => model.Name)</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-            @Html.DisplayNameFor(model => model.ExpensDate):
-            <span>@Html.DisplayFor(model => model.ExpensDate)</span>
+            @Html.DisplayNameFor(model => model.IncomeDate):
+            <span>@Html.DisplayFor(model => model.IncomeDate)</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
             @Html.DisplayNameFor(model => model.Amount):
@@ -30,4 +30,4 @@
     </ul>
     <a asp-action="Edit" asp-route-id="@Model.Id" style='margin-right:16px' class="btn btn-warning float-left mt-3">Edit</a>
     <a asp-action="All" style='margin-right:16px' class="btn btn-dark float-left mt-3">Back</a>
-</div>    
+</div> 

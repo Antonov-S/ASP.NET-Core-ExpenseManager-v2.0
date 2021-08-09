@@ -25,5 +25,9 @@
         public bool IsExpenseExist(int expenseId);
 
         IEnumerable<ExpenseCategoryServicesModel> GetExpenseCategories();
+
+        public int GetCategoryId(int expenseId);
+
+        public string GetCategorieName(int expenseCategoryId);
     }
 }

@@ -21,5 +21,8 @@
 
         IEnumerable<IncomeCategoryServicesModel> GetIncomeCategories();
         bool IsIncomeCategoryExist(AddIncomeServiceModel income);
+        public bool IsincomeExist(int incomeId);
+        public int GetCategoryId(int incomeId);
+        public string GetCategorieName(int incomeCategoryId);
     }
 }

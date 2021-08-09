@@ -121,7 +121,7 @@
 
             var detailedExpense = expenseService.Details(id);
 
-            if (detailedExpense == null)
+            if (detailedExpense.Categorie == null)
             {
                 this.ModelState.AddModelError(nameof(detailedExpense.Categorie), "Category name is missing ;(.");
             }           
