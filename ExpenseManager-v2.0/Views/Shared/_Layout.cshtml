@@ -23,39 +23,39 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
-                            Expenses
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item text-dark" asp-controller="Expense" asp-action="Add">Add Expense</a>
-                            <a class="dropdown-item text-dark" asp-controller="Expense" asp-action="All">All Expenses</a>
-                        </div>
-                    </div>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <div class="nav-item dropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
+                                Expenses
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                <li><a class="dropdown-item text-dark" asp-controller="Expense" asp-action="Add">Add Expense</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Expense" asp-action="All">All Expenses</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
                                 Incomes
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item text-dark" asp-controller="Income" asp-action="Add">Add Income</a>
-                                <a class="dropdown-item text-dark" asp-controller="Income" asp-action="All">All Incomes</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
-                            Credits
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item text-dark" asp-controller="Credit" asp-action="Add">Add Credit</a>
-                            <a class="dropdown-item text-dark" asp-controller="Credit" asp-action="All">All</a>
-                        </div>
-                    </div>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item text-dark" asp-controller="Income" asp-action="Add">Add Income</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Income" asp-action="All">All Incomes</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
+                                Credits
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item text-dark" asp-controller="Credit" asp-action="Add">Add Credit</a></li>
+                                <li><a class="dropdown-item text-dark" asp-controller="Credit" asp-action="All">All</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
                 <partial name="_LoginPartial" />
             </div>
-         </nav>
+        </nav>
     </header>
     <div class="container">
         <main role="main" class="pb-3">

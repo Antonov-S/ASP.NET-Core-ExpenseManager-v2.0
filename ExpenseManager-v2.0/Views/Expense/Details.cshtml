@@ -1,4 +1,4 @@
-﻿@model ExpenseManager_v2._0.Models.Expense.DetailedExpenseViewModel
+﻿@model ExpenseManager_v2._0.Services.Expense.ExpenseDetailsServiceModel
 
 @{
     ViewBag.Title = "Details";
@@ -6,8 +6,7 @@
 
 <h1 class="text-center">Details</h1>
 
-<div>
-    <div class="col-sm-12 offset-lg-2 col-ld-8 offset-ld-3 col-xl-6">
+
         <hr />
         <dt class="col-6 text-truncate">
             @Html.DisplayNameFor(model => model.Name)
@@ -33,13 +32,11 @@
         <dd class="col-12 text-truncate">
             @Html.DisplayFor(model => model.Notes)
         </dd>
-        <dt class="col-6 text-truncate">
-            @Html.DisplayNameFor(model => model.Category)
+        <dt class="col-12 text-truncate">
+            @Html.DisplayNameFor(model => model.Categorie)
         </dt>
-        <dd class="col-6 text-truncate">
-            @Html.DisplayFor(model => model.Category)
+        <dd class="col-12 text-truncate">
+            @Html.DisplayFor(model => model.Categorie)
         </dd>
         <a asp-action="Edit" asp-route-id="@Model.Id" style='margin-right:16px' class="btn btn-warning float-left mt-3">Edit</a>
         <a asp-action="All" style='margin-right:16px' class="btn btn-dark float-left mt-3">Back</a>
-    </div>
-</div>

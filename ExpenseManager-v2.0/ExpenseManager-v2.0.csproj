@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Expense\" />
     <Folder Include="Models\Income\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>

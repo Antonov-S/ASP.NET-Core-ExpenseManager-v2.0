@@ -3,5 +3,7 @@
     public class ExpenseDetailsServiceModel : AddExpenseServiceModel
     {
         public string UserId { get; init; }
+
+        public string Categorie { get; init; }
     }
 }

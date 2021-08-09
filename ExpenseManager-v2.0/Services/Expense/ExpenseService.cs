@@ -58,20 +58,41 @@
         }
 
         public ExpenseDetailsServiceModel Details(int expenseId)
-            => this.data
-              .Expenses
-              .Where(c => c.Id == expenseId)
-              .Select(c => new ExpenseDetailsServiceModel
-              {
-                  Id = c.Id,
-                  Name = c.Name,
-                  ExpensDate = c.ExpenseDate.ToString("dd/MM/yyyy"),
-                  Amount = c.Amount,
-                  Notes = c.Notes,
-                  ExpenseCategoryId = c.ExpenseCategoryId,
-                  UserId = c.UserId
-              })
-              .FirstOrDefault();
+        {
+            if (IsExpenseExist(expenseId))
+            {
+                var expenseCategoryId = this.data
+                .Expenses
+                .Where(x => x.Id == expenseId)
+                .Select(c => c.ExpenseCategoryId)
+                .FirstOrDefault();
+
+                var categorieName = this.GetCategorieName(expenseCategoryId);
+
+               var details = this.data
+                    .Expenses
+                    .Where(c => c.Id == expenseId)
+                    .Select(c => new ExpenseDetailsServiceModel
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        ExpensDate = c.ExpenseDate.ToString("dd/MM/yyyy"),
+                        Amount = c.Amount,
+                        Notes = c.Notes,
+                        ExpenseCategoryId = c.ExpenseCategoryId,
+                        UserId = c.UserId,
+                        Categorie = categorieName
+                    })
+                    .FirstOrDefault();
+
+                return details;
+            }
+            else
+            {
+                return null;
+            }         
+            
+        }
 
         public bool Edit(int id, string name, string expensDate, decimal amount, string notes, int expensCategoryId)
         {
@@ -94,8 +115,14 @@
         }
 
         public bool IsExpenseCategoryExist(AddExpenseServiceModel expenseToBeChacked)
-            => data.ExpenseCategories.Any(c => c.Id == expenseToBeChacked.ExpenseCategoryId);
+            => data
+            .ExpenseCategories
+            .Any(c => c.Id == expenseToBeChacked.ExpenseCategoryId);
 
+        public bool IsExpenseExist(int expenseId)
+            => data
+            .Expenses
+            .Any(e => e.Id == expenseId);
 
         public IEnumerable<ExpenseCategoryServicesModel> GetExpenseCategories()
             => this.data
@@ -106,5 +133,15 @@
                 Name = c.Name
             })
             .ToList();
+
+        public string GetCategorieName(int expenseCategoryId)
+            => this.data
+            .ExpenseCategories
+            .Where(c => c.Id == expenseCategoryId)
+            .Select (c => c.Name)
+            .FirstOrDefault()
+            .ToString();
+
+
     }
 }

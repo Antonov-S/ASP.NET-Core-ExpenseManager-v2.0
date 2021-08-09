@@ -1,25 +1,17 @@
 ﻿namespace ExpenseManager_v2._0.Controllers
 {
-    using System.Linq;
-    using System.Security.Claims;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using ExpenseManager_v2._0.Data;
-    using ExpenseManager_v2._0.Models.Expense;    
+    using Microsoft.AspNetCore.Mvc;    
     using ExpenseManager_v2._0.Services.Expense;
     using ExpenseManager_v2._0.Infrastructure;
 
     public class ExpenseController : Controller
     {
-        private readonly ExpenseManagerDbContext data;
         private readonly IExpenseService expenseService;
 
-        public ExpenseController(ExpenseManagerDbContext data,
-            IExpenseService expenseService)
-        { 
-            this.data = data;
-            this.expenseService = expenseService;
-        }
+        public ExpenseController(IExpenseService expenseService)
+            => this.expenseService = expenseService;
+        
 
 
         [Authorize]
@@ -30,7 +22,7 @@
         [Authorize]
         public IActionResult Add(AddExpenseServiceModel expense)
         {
-            if (!this.data.ExpenseCategories.Any(c => c.Id == expense.ExpenseCategoryId))
+            if (!expenseService.IsExpenseCategoryExist(expense))
             {
                 this.ModelState.AddModelError(nameof(expense.ExpenseCategoryId), "Category does not exist.");
             }
@@ -41,10 +33,10 @@
 
                 return View(expense);
             }
-            
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            expenseService.POSTAdd(expense, userId);
+            var currentUserId = this.User.GetId();
+
+            expenseService.POSTAdd(expense, currentUserId);
 
             return RedirectToAction("Index", "Home");
         }
@@ -52,39 +44,12 @@
         [Authorize]
         public IActionResult All()
         {
-            var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUserId = this.User.GetId();
 
             var expensesForThisUser = this.expenseService.All(currentUserId);
 
             return View(expensesForThisUser);
-        }
-
-        [Authorize]
-        public ActionResult Details(int id)
-        {
-            var exists = this.data
-                .Expenses
-                .Any(q => q.Id == id);
-
-            if (!exists)
-            {
-                return NotFound();
-            }
-
-            var detailedExpense = this.data
-                .Expenses
-                .Where(c => c.Id == id)
-                .Select(e => new DetailedExpenseViewModel
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    ExpensDate = e.ExpenseDate.ToString("dd/MM/yyyy"),
-                    Amount = e.Amount,
-                    Notes = e.Notes,
-                    Category = e.ExpenseCategory.Name
-                }).FirstOrDefault();
-            return View(detailedExpense);
-        }
+        }        
 
         [Authorize]
         public IActionResult Edit(int id)
@@ -142,6 +107,26 @@
 
                 return RedirectToAction(nameof(All));
             
+        }
+
+        [Authorize]
+        public ActionResult Details(int id)
+        {
+            var exists = expenseService.IsExpenseExist(id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var detailedExpense = expenseService.Details(id);
+
+            if (detailedExpense == null)
+            {
+                this.ModelState.AddModelError(nameof(detailedExpense.Categorie), "Category name is missing ;(.");
+            }           
+
+            return View(detailedExpense);
         }
 
     }

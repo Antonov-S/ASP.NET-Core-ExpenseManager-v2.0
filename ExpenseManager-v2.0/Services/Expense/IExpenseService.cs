@@ -5,9 +5,13 @@
     public interface IExpenseService
     {
         AddExpenseServiceModel GETAdd();
+
         void POSTAdd(AddExpenseServiceModel addServiceModel, string userId);
+
         IEnumerable<ExpenseServiceListingModel> All(string userId);
+
         ExpenseDetailsServiceModel Details(int expenseId);
+
         bool Edit(
             int id,
             string name,
@@ -15,7 +19,11 @@
             decimal amount,
             string notes,
             int expensCategoryId);
-        bool IsExpenseCategoryExist(AddExpenseServiceModel expenseToBeChacked);
+
+        public bool IsExpenseCategoryExist(AddExpenseServiceModel expenseToBeChacked);
+
+        public bool IsExpenseExist(int expenseId);
+
         IEnumerable<ExpenseCategoryServicesModel> GetExpenseCategories();
     }
 }
