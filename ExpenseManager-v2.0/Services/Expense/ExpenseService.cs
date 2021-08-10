@@ -92,7 +92,7 @@
 
         public bool Edit(int id, string name, string expensDate, decimal amount, string notes, int expensCategoryId)
         {
-            var editedData = this.data.Expenses.Find(id);
+            var editedData = FindExpense(id);
 
             if (editedData == null)
             {
@@ -105,8 +105,22 @@
             editedData.Notes = notes;
             editedData.ExpenseCategoryId = expensCategoryId;
 
-            this.data.SaveChanges();
+            data.SaveChanges();
 
+            return true;
+        }
+
+        public bool Delete(int id)
+        {
+            var deletedExpense = FindExpense(id);
+
+            if (deletedExpense == null)
+            {
+                return false;
+            }
+
+            data.Expenses.Remove(deletedExpense);
+            data.SaveChanges();
             return true;
         }
 
@@ -145,6 +159,9 @@
                 .Select(c => c.ExpenseCategoryId)
                 .FirstOrDefault();
 
-
+        public Expense FindExpense(int id)
+            => this.data
+            .Expenses.Find(id);
+        
     }
 }

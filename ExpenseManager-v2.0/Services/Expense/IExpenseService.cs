@@ -1,6 +1,7 @@
 ﻿namespace ExpenseManager_v2._0.Services.Expense
 {
     using System.Collections.Generic;
+    using ExpenseManager_v2._0.Data.Models;
 
     public interface IExpenseService
     {
@@ -29,5 +30,9 @@
         public int GetCategoryId(int expenseId);
 
         public string GetCategorieName(int expenseCategoryId);
+
+        public Expense FindExpense(int id);
+
+        bool Delete(int id);
     }
 }

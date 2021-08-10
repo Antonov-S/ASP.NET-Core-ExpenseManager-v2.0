@@ -115,6 +115,20 @@
             return true;
         }
 
+        public bool Delete(int id)
+        {
+            var deletedIncome = FindIncome(id);
+
+            if (deletedIncome == null)
+            {
+                return false;
+            }
+
+            data.Incomes.Remove(deletedIncome);
+            data.SaveChanges();
+            return true;
+        }
+
         public IEnumerable<IncomeCategoryServicesModel> GetIncomeCategories()
                 => this.data
                .IncomeCategories
@@ -147,5 +161,10 @@
             .Select(c => c.Name)
             .FirstOrDefault()
             .ToString();
+
+        public Income FindIncome(int id)
+            => this.data
+            .Incomes.Find(id);
+        
     }
 }

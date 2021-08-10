@@ -127,5 +127,25 @@
             return View(detailedIncome);
         }
 
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            var exists = incomeService.IsincomeExist(id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var result = incomeService.Delete(id);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(All));
+        }
+
     }
 }

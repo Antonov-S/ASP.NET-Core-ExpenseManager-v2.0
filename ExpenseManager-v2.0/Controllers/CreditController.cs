@@ -107,5 +107,25 @@
 
             return View(detailedExpense);
         }
+
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            var exists = creditService.IsCreditExist(id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var result = creditService.Delete(id);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }

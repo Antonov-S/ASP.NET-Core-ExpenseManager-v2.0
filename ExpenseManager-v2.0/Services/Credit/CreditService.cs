@@ -104,9 +104,28 @@
             return true;
         }
 
+        public bool Delete(int id)
+        {
+            var deletedCredit = FindCredit(id);
+
+            if (deletedCredit == null)
+            {
+                return false;
+            }
+
+            data.Credits.Remove(deletedCredit);
+            data.SaveChanges();
+            return true;
+        }
+
         public bool IsCreditExist(int creditId)
             => data
             .Credits
             .Any(e => e.Id == creditId);
+
+        public Credit FindCredit(int id)
+            => this.data
+            .Credits.Find(id);
+        
     }
 }

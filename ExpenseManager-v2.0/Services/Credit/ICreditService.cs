@@ -1,6 +1,7 @@
 ﻿namespace ExpenseManager_v2._0.Services.Credit
 {
     using System.Collections.Generic;
+    using ExpenseManager_v2._0.Data.Models;
 
     public interface ICreditService
     {
@@ -24,5 +25,9 @@
             string notes);
 
         public bool IsCreditExist(int creditId);
+
+        public Credit FindCredit(int id);
+
+        bool Delete(int id);
     }
 }

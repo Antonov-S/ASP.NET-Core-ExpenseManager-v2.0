@@ -1,6 +1,7 @@
 ﻿namespace ExpenseManager_v2._0.Services.Income
 {
     using System.Collections.Generic;
+    using ExpenseManager_v2._0.Data.Models;
 
     public interface IIncomeService
     {
@@ -24,5 +25,7 @@
         public bool IsincomeExist(int incomeId);
         public int GetCategoryId(int incomeId);
         public string GetCategorieName(int incomeCategoryId);
+        public Income FindIncome(int id);
+        bool Delete(int id);
     }
 }

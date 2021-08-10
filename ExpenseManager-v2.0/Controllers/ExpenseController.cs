@@ -129,5 +129,25 @@
             return View(detailedExpense);
         }
 
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            var exists = expenseService.IsExpenseExist(id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var result = expenseService.Delete(id);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(All));
+        }
+
     }
 }
