@@ -29,5 +29,12 @@
         public Credit FindCredit(int id);
 
         bool Delete(int id);
+
+        public bool IsCreditRemainingAmountEnough(int creditId, decimal installmentLoanAmount);
+
+        void POSTMakePayment(AddInstallmentLoansServiceModel installmentLoanModel, int Id);
+
+        IEnumerable<ListingInstallmentLoansServiceModel> AllPaymentsOnCredit(int creditUd);
+
     }
 }

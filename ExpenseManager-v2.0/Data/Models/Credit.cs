@@ -1,6 +1,7 @@
 ﻿namespace ExpenseManager_v2._0.Data.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -38,7 +39,9 @@
         public string Notes { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; init; }
         public ApplicationUser User { get; init; }
+
+        public IEnumerable<InstallmentLoan> InstallmentLoans { get; init; } = new List<InstallmentLoan>();
     }
 }

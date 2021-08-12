@@ -3,17 +3,16 @@
     using System;
     using System.Linq;
     using System.Collections.Generic;
-    using AutoMapper;
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Data.Models;
-    
+
     public class CreditService : ICreditService
     {
         private readonly ExpenseManagerDbContext data;
 
         public CreditService(ExpenseManagerDbContext data)
             => this.data = data;
-            
+
 
         public AddCreditServiceModel GETAdd()
         {
@@ -64,24 +63,24 @@
               .Select(c => new CreditDetailsServiceModel
               {
                   Id = c.Id,
-                  Name = c.Name,                  
+                  Name = c.Name,
                   AmountOfMonthlyInstallment = c.AmountOfMonthlyInstallment,
                   NumberOfInstallmentsRemaining = c.NumberOfInstallmentsRemaining,
                   UnpaidFees = c.UnpaidFees,
-                  MaturityDate = c.MaturityDate.ToString("dd"),
+                  MaturityDate = c.MaturityDate.ToString("dd/MM/yyyy"),
                   Total = c.Total,
                   Notes = c.Notes,
                   UserId = c.UserId
               })
               .FirstOrDefault();
 
-        public bool Edit(int id, 
-            string name, 
-            decimal amountOfMonthlyInstallment, 
-            int numberOfInstallmentsRemaining, 
-            decimal unpaidFees, 
-            string maturityDate, 
-            decimal total, 
+        public bool Edit(int id,
+            string name,
+            decimal amountOfMonthlyInstallment,
+            int numberOfInstallmentsRemaining,
+            decimal unpaidFees,
+            string maturityDate,
+            decimal total,
             string notes)
         {
             var editedData = this.data.Credits.Find(id);
@@ -118,14 +117,63 @@
             return true;
         }
 
+        public void POSTMakePayment(AddInstallmentLoansServiceModel installmentLoanModel, int Id)
+        {
+            var installmentLoanData = new InstallmentLoan
+            {
+                Date = installmentLoanModel.Date,
+                Amount = installmentLoanModel.Amount,
+                CreditId = Id
+            };
+
+            data.Add(installmentLoanData);
+
+            var creditToBeRedused = FindCredit(installmentLoanData.CreditId);
+
+            if (creditToBeRedused != null)
+            {
+                creditToBeRedused.Total -= installmentLoanData.Amount;
+            }
+
+            data.SaveChanges();
+        }
+
+        public IEnumerable<ListingInstallmentLoansServiceModel> AllPaymentsOnCredit(int creditUd)
+        {
+            var payments = this.data
+                .InstallmentLoans
+                .Where(p => p.CreditId == creditUd)
+                .Select(p => new ListingInstallmentLoansServiceModel
+                {
+                    Id = p.Id,
+                    Amount = p.Amount,
+                    Date = p.Date
+                })
+                .ToList();
+
+            return payments;
+        }
+
+
         public bool IsCreditExist(int creditId)
-            => data
-            .Credits
-            .Any(e => e.Id == creditId);
+                => data
+                .Credits
+                .Any(e => e.Id == creditId);
 
         public Credit FindCredit(int id)
             => this.data
             .Credits.Find(id);
-        
-    }
+
+        public bool IsCreditRemainingAmountEnough(int creditId, decimal installmentLoanAmount)
+        {
+            var credit = FindCredit(creditId);
+
+            if (credit.Total < installmentLoanAmount)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }        
 }

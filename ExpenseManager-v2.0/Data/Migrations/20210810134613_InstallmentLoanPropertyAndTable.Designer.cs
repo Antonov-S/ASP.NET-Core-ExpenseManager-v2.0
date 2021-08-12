@@ -4,14 +4,16 @@ using ExpenseManager_v2._0.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ExpenseManager_v2._0.Data.Migrations
 {
     [DbContext(typeof(ExpenseManagerDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210810134613_InstallmentLoanPropertyAndTable")]
+    partial class InstallmentLoanPropertyAndTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,7 +189,7 @@ namespace ExpenseManager_v2._0.Data.Migrations
 
                     b.HasIndex("CreditId");
 
-                    b.ToTable("InstallmentLoans");
+                    b.ToTable("InstallmentLoan");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -468,9 +470,9 @@ namespace ExpenseManager_v2._0.Data.Migrations
             modelBuilder.Entity("ExpenseManager_v2._0.Data.Models.InstallmentLoan", b =>
                 {
                     b.HasOne("ExpenseManager_v2._0.Data.Models.Credit", "Credit")
-                        .WithMany("InstallmentLoans")
+                        .WithMany("InstallmentLoan")
                         .HasForeignKey("CreditId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Credit");
@@ -550,7 +552,7 @@ namespace ExpenseManager_v2._0.Data.Migrations
 
             modelBuilder.Entity("ExpenseManager_v2._0.Data.Models.Credit", b =>
                 {
-                    b.Navigation("InstallmentLoans");
+                    b.Navigation("InstallmentLoan");
                 });
 
             modelBuilder.Entity("ExpenseManager_v2._0.Data.Models.ExpenseCategory", b =>

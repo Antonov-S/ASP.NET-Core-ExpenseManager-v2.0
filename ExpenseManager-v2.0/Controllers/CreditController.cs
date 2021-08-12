@@ -12,6 +12,7 @@
         public CreditController(ICreditService creditService)
             => this.creditService = creditService;
 
+        [Authorize]
         public IActionResult Add()
             => View(creditService.GETAdd());
 
@@ -127,5 +128,43 @@
 
             return RedirectToAction(nameof(All));
         }
+
+        [Authorize]
+        public IActionResult MakePayment()
+            => View(new AddInstallmentLoansServiceModel());
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult MakePayment(AddInstallmentLoansServiceModel installmentLoanModel, int Id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(installmentLoanModel);
+            }
+
+            creditService.POSTMakePayment(installmentLoanModel, Id);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult PaymentsOnCredit(int Id)
+        {
+            var exists = creditService.IsCreditExist(Id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var payments = creditService.AllPaymentsOnCredit(Id);
+
+            if (payments == null)
+            {
+                return BadRequest();
+            }
+
+            return View(payments);
+        }
+
     }
 }

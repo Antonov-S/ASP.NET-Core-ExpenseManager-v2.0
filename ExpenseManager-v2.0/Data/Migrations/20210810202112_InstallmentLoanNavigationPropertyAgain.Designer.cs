@@ -4,14 +4,16 @@ using ExpenseManager_v2._0.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ExpenseManager_v2._0.Data.Migrations
 {
     [DbContext(typeof(ExpenseManagerDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210810202112_InstallmentLoanNavigationPropertyAgain")]
+    partial class InstallmentLoanNavigationPropertyAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,6 +181,9 @@ namespace ExpenseManager_v2._0.Data.Migrations
                     b.Property<int>("CreditId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CreditId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("Date")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -186,6 +191,10 @@ namespace ExpenseManager_v2._0.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreditId");
+
+                    b.HasIndex("CreditId1")
+                        .IsUnique()
+                        .HasFilter("[CreditId1] IS NOT NULL");
 
                     b.ToTable("InstallmentLoans");
                 });
@@ -473,6 +482,10 @@ namespace ExpenseManager_v2._0.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ExpenseManager_v2._0.Data.Models.Credit", null)
+                        .WithOne("InstallmentLoan")
+                        .HasForeignKey("ExpenseManager_v2._0.Data.Models.InstallmentLoan", "CreditId1");
+
                     b.Navigation("Credit");
                 });
 
@@ -550,6 +563,8 @@ namespace ExpenseManager_v2._0.Data.Migrations
 
             modelBuilder.Entity("ExpenseManager_v2._0.Data.Models.Credit", b =>
                 {
+                    b.Navigation("InstallmentLoan");
+
                     b.Navigation("InstallmentLoans");
                 });
 
