@@ -31,6 +31,7 @@
                 Amount = addServiceModel.Amount,
                 Notes = addServiceModel.Notes,
                 IncomeCategorysId = addServiceModel.IncomeCategoryId,
+                IsDeleted = false,
                 UserId = userId
             };
 
@@ -42,7 +43,7 @@
         {
             var incomes = this.data
                 .Incomes
-                .Where(c => c.UserId == currentUserId)
+                .Where(c => c.UserId == currentUserId && c.IsDeleted != true)
                 .OrderByDescending(c => c.Id)
                 .Select(c => new IncomeServiceListingModel
                 {
@@ -59,7 +60,7 @@
 
         public IncomeDetailsServiceModel Details(int incomeId)
         {
-            if (IsincomeExist(incomeId))
+            if (IsincomeExist(incomeId) && IsDeleted(incomeId) != true)
             {
                 var incomeCategoryId = GetCategoryId(incomeId);
 
@@ -99,7 +100,7 @@
         {
             var editedData = this.data.Incomes.Find(id);
 
-            if (editedData == null)
+            if (editedData == null || IsDeleted(id) == true)
             {
                 return false;
             }
@@ -119,12 +120,13 @@
         {
             var deletedIncome = FindIncome(id);
 
-            if (deletedIncome == null)
+            if (deletedIncome == null || IsDeleted(id) == true)
             {
                 return false;
             }
 
-            data.Incomes.Remove(deletedIncome);
+            deletedIncome.IsDeleted = true;
+
             data.SaveChanges();
             return true;
         }
@@ -145,7 +147,7 @@
         public bool IsincomeExist(int incomeId)
             => data
             .Incomes
-            .Any(e => e.Id == incomeId);
+            .Any(e => e.Id == incomeId && IsDeleted(incomeId) != true);
 
         public int GetCategoryId(int incomeId)
             => this.data
@@ -165,6 +167,12 @@
         public Income FindIncome(int id)
             => this.data
             .Incomes.Find(id);
-        
+
+        public bool IsDeleted(int id)
+            => this.data
+                .Incomes
+                .Where(c => c.Id == id)
+                .Select(c => c.IsDeleted)
+                .FirstOrDefault();
     }
 }

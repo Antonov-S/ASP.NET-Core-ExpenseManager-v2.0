@@ -30,6 +30,7 @@
                 MaturityDate = DateTime.Parse(addCreditModel.MaturityDate),
                 Total = addCreditModel.Total,
                 Notes = addCreditModel.Notes,
+                IsDeleted = false,
                 UserId = userId
             };
 
@@ -41,7 +42,7 @@
         {
             var credits = this.data
                 .Credits
-                .Where(c => c.UserId == currentUserId)
+                .Where(c => c.UserId == currentUserId && c.IsDeleted != true)
                 .OrderByDescending(c => c.Id)
                 .Select(c => new CreditServiceListingModel
                 {
@@ -59,7 +60,7 @@
         public CreditDetailsServiceModel Details(int creditId)
             => this.data
               .Credits
-              .Where(c => c.Id == creditId)
+              .Where(c => c.Id == creditId && IsDeleted(creditId) != true)
               .Select(c => new CreditDetailsServiceModel
               {
                   Id = c.Id,
@@ -85,7 +86,7 @@
         {
             var editedData = this.data.Credits.Find(id);
 
-            if (editedData == null)
+            if (editedData == null || editedData.IsDeleted == true)
             {
                 return false;
             }
@@ -107,18 +108,20 @@
         {
             var deletedCredit = FindCredit(id);
 
-            if (deletedCredit == null)
+            if (deletedCredit == null || deletedCredit.IsDeleted == true)
             {
                 return false;
             }
 
-            data.Credits.Remove(deletedCredit);
+            deletedCredit.IsDeleted = true;
+
             data.SaveChanges();
             return true;
         }
 
         public void POSTMakePayment(AddInstallmentLoansServiceModel installmentLoanModel, int Id)
         {
+                      
             var installmentLoanData = new InstallmentLoan
             {
                 Date = installmentLoanModel.Date,
@@ -138,11 +141,11 @@
             data.SaveChanges();
         }
 
-        public IEnumerable<ListingInstallmentLoansServiceModel> AllPaymentsOnCredit(int creditUd)
+        public IEnumerable<ListingInstallmentLoansServiceModel> AllPaymentsOnCredit(int creditId)
         {
             var payments = this.data
                 .InstallmentLoans
-                .Where(p => p.CreditId == creditUd)
+                .Where(p => p.CreditId == creditId && p.IsDeleted != true)
                 .Select(p => new ListingInstallmentLoansServiceModel
                 {
                     Id = p.Id,
@@ -154,11 +157,34 @@
             return payments;
         }
 
+        public bool DeletePayment(int Id)
+        {
+            var deletedPayment = this.data
+                .InstallmentLoans
+                .Where(c => c.Id == Id)
+                .FirstOrDefault();
+
+            if (deletedPayment.IsDeleted == true)
+            {
+                return false;
+            }
+
+            if (deletedPayment == null)
+            {
+                return false;
+            }
+
+            deletedPayment.IsDeleted = true;
+
+            data.SaveChanges();
+            return true;
+        }
+
 
         public bool IsCreditExist(int creditId)
                 => data
                 .Credits
-                .Any(e => e.Id == creditId);
+                .Any(e => e.Id == creditId && e.IsDeleted != true);
 
         public Credit FindCredit(int id)
             => this.data
@@ -175,5 +201,17 @@
 
             return true;
         }
+
+        public bool IsDeleted(int id)
+            => this.data
+                .Credits
+                .Where(c => c.Id == id)
+                .Select(c => c.IsDeleted)
+                .FirstOrDefault();
+
+        public bool IsPaymentExist(int paymentId)
+            => data
+                .InstallmentLoans
+                .Any(e => e.Id == paymentId && IsDeleted(paymentId) != true);
     }        
 }

@@ -34,5 +34,7 @@
         public Expense FindExpense(int id);
 
         bool Delete(int id);
+
+        public bool IsDeleted(int expenseId);
     }
 }

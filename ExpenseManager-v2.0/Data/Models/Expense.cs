@@ -27,6 +27,9 @@
 
         public string Notes { get; set; }
 
+        [Required]
+        public bool IsDeleted { get; set; }
+
         public int ExpenseCategoryId { get; set; }
         public ExpenseCategory ExpenseCategory { get; init; }
 

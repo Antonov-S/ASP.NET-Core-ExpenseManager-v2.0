@@ -15,6 +15,9 @@
         [Column(TypeName = "decimal(10, 2)")]
         public decimal Amount { get; init; }
 
+        [Required]
+        public bool IsDeleted { get; set; }
+
         public int CreditId { get; init; }
         public Credit Credit { get; init; }
     }

@@ -166,5 +166,24 @@
             return View(payments);
         }
 
+        public IActionResult PaymentDeleteOnCredit(int Id)
+        {
+            var exists = creditService.IsPaymentExist(Id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var result = creditService.DeletePayment(Id);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(All));
+        }
+
     }
 }

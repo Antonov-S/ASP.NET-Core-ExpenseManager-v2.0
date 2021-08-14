@@ -6,12 +6,10 @@
     public interface IIncomeService
     {
         AddIncomeServiceModel GETAdd();
-
         void POSTAdd(AddIncomeServiceModel addServiceModel,
             string userId);
         IEnumerable<IncomeServiceListingModel> All(string userId);
         IncomeDetailsServiceModel Details(int incomeId);
-
         bool Edit(
             int id,
             string name,
@@ -27,5 +25,6 @@
         public string GetCategorieName(int incomeCategoryId);
         public Income FindIncome(int id);
         bool Delete(int id);
+        public bool IsDeleted(int id);
     }
 }

@@ -39,6 +39,9 @@
         public string Notes { get; set; }
 
         [Required]
+        public bool IsDeleted { get; set; }
+
+        [Required]
         public string UserId { get; init; }
         public ApplicationUser User { get; init; }
 

@@ -27,6 +27,9 @@
 
         public string Notes { get; set; }
 
+        [Required]
+        public bool IsDeleted { get; set; }
+
         public int IncomeCategorysId { get; set; }
         public IncomeCategory IncomeCategory { get; init; }
 

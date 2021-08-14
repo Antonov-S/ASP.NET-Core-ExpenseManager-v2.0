@@ -31,6 +31,7 @@
                 Amount = addServiceModel.Amount,
                 Notes = addServiceModel.Notes,
                 ExpenseCategoryId = addServiceModel.ExpenseCategoryId,
+                IsDeleted = false,
                 UserId = userId
             };
 
@@ -42,7 +43,7 @@
         {
             var expenses = this.data
                 .Expenses
-                .Where(c => c.UserId == currentUserId)
+                .Where(c => c.UserId == currentUserId && c.IsDeleted != true)
                 .OrderByDescending(c => c.Id)
                 .Select(c => new ExpenseServiceListingModel
                 {
@@ -67,7 +68,7 @@
 
                var details = this.data
                     .Expenses
-                    .Where(c => c.Id == expenseId)
+                    .Where(c => c.Id == expenseId && IsDeleted(expenseId) == false)
                     .Select(c => new ExpenseDetailsServiceModel
                     {
                         Id = c.Id,
@@ -94,7 +95,7 @@
         {
             var editedData = FindExpense(id);
 
-            if (editedData == null)
+            if (editedData == null || IsDeleted(id) == true)
             {
                 return false;
             }
@@ -119,7 +120,7 @@
                 return false;
             }
 
-            data.Expenses.Remove(deletedExpense);
+            deletedExpense.IsDeleted = true;
             data.SaveChanges();
             return true;
         }
@@ -132,7 +133,7 @@
         public bool IsExpenseExist(int expenseId)
             => data
             .Expenses
-            .Any(e => e.Id == expenseId);
+            .Any(e => e.Id == expenseId && IsDeleted(expenseId) == false);
 
         public IEnumerable<ExpenseCategoryServicesModel> GetExpenseCategories()
             => this.data
@@ -160,8 +161,24 @@
                 .FirstOrDefault();
 
         public Expense FindExpense(int id)
+        {
+            if (IsExpenseExist(id) && IsDeleted(id) == false)
+            {
+               var result = this.data
+              .Expenses
+              .Find(id);
+
+                return result;
+            }
+
+            return null;
+        }
+
+        public bool IsDeleted(int expenseId)
             => this.data
-            .Expenses.Find(id);
-        
+                .Expenses
+                .Where(c => c.Id == expenseId)
+                .Select(c => c.IsDeleted)
+                .FirstOrDefault();
     }
 }
