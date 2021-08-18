@@ -1,0 +1,26 @@
+﻿@model SavingServiceModel
+
+@{
+    ViewBag.Title = "Savings";
+}
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="heading-margin text-center">@ViewBag.Title</h2>
+
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Well done!</h4>
+            <p>Total of the money that you have saved.</p>
+            <hr>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                @Html.DisplayNameFor(model => model.Total): <span>  @Html.DisplayFor(model => model.Total)</span>
+            </div>
+        </div>
+
+        <a asp-action="Add" class="btn btn-success float-left mt-3" asp-route-id="@Model.Id" method="post" style='margin-right:16px'>Add</a>
+        <a asp-action="Contributions" asp-route-id="@Model.Id" style='margin-right:16px' class="btn btn-info float-left mt-3">Info</a>
+        <a asp-action="Index" asp-controller="Home" style='margin-right:16px' class="btn btn-dark float-left mt-3">Back</a>
+    </div>
+</div>
+
+

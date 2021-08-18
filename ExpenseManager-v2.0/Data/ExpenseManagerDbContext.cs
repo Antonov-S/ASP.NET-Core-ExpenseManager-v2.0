@@ -19,6 +19,8 @@
         public DbSet<ApplicationUser> ApplicationUsers { get; init; }
         public DbSet<Credit> Credits { get; init; }
         public DbSet<InstallmentLoan> InstallmentLoans { get; init; }
+        public DbSet<Saving> Savings { get; init; }
+        public DbSet<ContributionToSaving> ContributionToSavings { get; init; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -62,6 +64,17 @@
                 .HasOne(c => c.Credit)
                 .WithMany(c => c.InstallmentLoans)
                 .HasForeignKey(c => c.CreditId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<ApplicationUser>()
+                .HasOne(c => c.Saving);
+
+            builder
+                .Entity<ContributionToSaving>()
+                .HasOne(c => c.Saving)
+                .WithMany(c => c.ContributionToSavings)
+                .HasForeignKey(c => c.SavingId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

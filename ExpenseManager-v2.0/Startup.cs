@@ -5,6 +5,7 @@ namespace ExpenseManager_v2._0
     using ExpenseManager_v2._0.Services.Credit;
     using ExpenseManager_v2._0.Services.Expense;
     using ExpenseManager_v2._0.Services.Income;
+    using ExpenseManager_v2._0.Services.Saving;
     using ExpenseManager_v2._0.Services.Statistics;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -58,6 +59,9 @@ namespace ExpenseManager_v2._0
 
             services
                 .AddTransient<ICreditService, CreditService>();
+
+            services
+                .AddTransient<ISavingService, SavingService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -84,9 +88,7 @@ namespace ExpenseManager_v2._0
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
-                    endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });
 
