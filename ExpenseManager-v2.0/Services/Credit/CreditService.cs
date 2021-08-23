@@ -3,15 +3,21 @@
     using System;
     using System.Linq;
     using System.Collections.Generic;
+    using AutoMapper;
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Data.Models;
+    
 
     public class CreditService : ICreditService
     {
         private readonly ExpenseManagerDbContext data;
+        private readonly IMapper _mapper;
 
-        public CreditService(ExpenseManagerDbContext data)
-            => this.data = data;
+        public CreditService(ExpenseManagerDbContext data, IMapper mapper)
+        { 
+            this.data = data;
+            this._mapper = mapper;
+        }
 
 
         public AddCreditServiceModel GETAdd()
@@ -21,19 +27,8 @@
 
         public void POSTAdd(AddCreditServiceModel addCreditModel, string userId)
         {
-            var creditData = new Credit
-            {
-                Name = addCreditModel.Name,
-                AmountOfMonthlyInstallment = addCreditModel.AmountOfMonthlyInstallment,
-                NumberOfInstallmentsRemaining = addCreditModel.NumberOfInstallmentsRemaining,
-                UnpaidFees = addCreditModel.UnpaidFees,
-                MaturityDate = DateTime.Parse(addCreditModel.MaturityDate),
-                Total = addCreditModel.Total,
-                Notes = addCreditModel.Notes,
-                IsDeleted = false,
-                UserId = userId
-            };
-
+            var creditData = _mapper.Map<Credit>(addCreditModel);
+            creditData.UserId = userId;
             data.Add(creditData);
             data.SaveChanges();
         }
@@ -44,36 +39,22 @@
                 .Credits
                 .Where(c => c.UserId == currentUserId && c.IsDeleted != true)
                 .OrderByDescending(c => c.Id)
-                .Select(c => new CreditServiceListingModel
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    MaturityDate = c.MaturityDate.ToString("dd/MM/yyyy"),
-                    Total = c.Total.ToString(),
-                    UserId = c.UserId
-                })
                 .ToList();
 
-            return credits;
+            var payments = _mapper.Map<List<Credit>, List<CreditServiceListingModel>>(credits);
+
+            return payments;
         }
 
         public CreditDetailsServiceModel Details(int creditId)
-            => this.data
-              .Credits
-              .Where(c => c.Id == creditId && IsDeleted(creditId) != true)
-              .Select(c => new CreditDetailsServiceModel
-              {
-                  Id = c.Id,
-                  Name = c.Name,
-                  AmountOfMonthlyInstallment = c.AmountOfMonthlyInstallment,
-                  NumberOfInstallmentsRemaining = c.NumberOfInstallmentsRemaining,
-                  UnpaidFees = c.UnpaidFees,
-                  MaturityDate = c.MaturityDate.ToString("dd/MM/yyyy"),
-                  Total = c.Total,
-                  Notes = c.Notes,
-                  UserId = c.UserId
-              })
-              .FirstOrDefault();
+        {
+            var detail = this.data
+                .Credits
+                .Where(c => c.Id == creditId && IsDeleted(creditId) != true)
+                .FirstOrDefault();
+
+            return _mapper.Map<CreditDetailsServiceModel>(detail);            
+        }
 
         public bool Edit(int id,
             string name,
@@ -143,16 +124,12 @@
 
         public IEnumerable<ListingInstallmentLoansServiceModel> AllPaymentsOnCredit(int creditId)
         {
-            var payments = this.data
+            var installmentLoans = this.data
                 .InstallmentLoans
                 .Where(p => p.CreditId == creditId && p.IsDeleted != true)
-                .Select(p => new ListingInstallmentLoansServiceModel
-                {
-                    Id = p.Id,
-                    Amount = p.Amount,
-                    Date = p.Date
-                })
                 .ToList();
+
+            var payments = _mapper.Map<List<InstallmentLoan>, List<ListingInstallmentLoansServiceModel>>(installmentLoans);
 
             return payments;
         }

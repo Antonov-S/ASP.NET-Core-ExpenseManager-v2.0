@@ -38,7 +38,7 @@
 
             incomeService.POSTAdd(income, userId);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(All));
         }
 
         [Authorize]

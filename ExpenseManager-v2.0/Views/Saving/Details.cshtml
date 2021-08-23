@@ -1,0 +1,27 @@
+﻿@model ExpenseManager_v2._0.Views.Saving.SavingDetailsServiceModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="col-sm-12 offset-lg-2 col-ld-8 offset-ld-3 col-xl-6">
+    <h2 class="heading-margin text-center">@ViewBag.Title</h2>
+    <ul class="list-group">        
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            @Html.DisplayNameFor(model => model.Name):
+            <span>@Html.DisplayFor(model => model.Name)</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            @Html.DisplayNameFor(model => model.DesiredTotal):
+            <span>@Html.DisplayFor(model => model.DesiredTotal)</span>
+        </li>        
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            @Html.DisplayNameFor(model => model.CurrentTotal):
+            <span>@Html.DisplayFor(model => model.CurrentTotal)</span>
+        </li>
+    </ul>
+    <a asp-action="EditSaving" asp-route-id="@Model.Id" style='margin-right:16px' class="btn btn-warning float-left mt-3">Edit</a>
+    <a asp-action="Contributions" asp-route-id="@Model.Id" style='margin-right:16px' class="btn btn-info float-left mt-3">Info</a>
+    <a asp-action="All" style='margin-right:16px' class="btn btn-dark float-left mt-3">Back</a>
+</div>
+

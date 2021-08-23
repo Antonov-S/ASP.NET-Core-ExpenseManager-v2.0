@@ -5,7 +5,8 @@
     using System.Linq;
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Data.Models;
-    
+    using ExpenseManager_v2._0.Views.Saving;
+
     public class SavingService : ISavingService
     {
         private readonly ExpenseManagerDbContext data;
@@ -13,13 +14,33 @@
         public SavingService(ExpenseManagerDbContext data)
             => this.data = data;
 
-        public AddContributionServiceModel GETAdd()
+        public AddSavingServiceModel GETAddSaving()
+        {
+            return new AddSavingServiceModel();
+        }
+
+        public void POSTAddSaving(AddSavingServiceModel addSavingModel, string userId)
+        {
+            var savingData = new Saving
+            {
+                Name = addSavingModel.Name,
+                DesiredTotal = addSavingModel.DesiredTotal,
+                IsDeleted = false,
+                UserId = userId
+            };
+
+            data.Add(savingData);
+            data.SaveChanges();
+        }
+
+
+        public AddContributionServiceModel GETAddContribution()
         {
             return new AddContributionServiceModel();
         }
 
-        public void POSTAdd(AddContributionServiceModel addContributionModel, 
-            int savingId, 
+        public void POSTAddContribution(AddContributionServiceModel addContributionModel,
+            int savingId,
             string userId)
         {
             var contributionData = new ContributionToSaving
@@ -31,9 +52,70 @@
             };
 
             data.Add(contributionData);
-            var savingToBeIncreased = data.Savings.Where(i => i.UserId == userId).FirstOrDefault();
-            savingToBeIncreased.Total += contributionData.Amount;
             data.SaveChanges();
+        }
+
+        public IEnumerable<SavingServiceListingModel> All(string userId)
+        {
+            var savings = this.data
+                .Savings
+                .Where(c => c.UserId == userId && c.IsDeleted != true)
+                .Select(c => new SavingServiceListingModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    DesiredTotal = c.DesiredTotal,
+                    UserId = c.UserId
+                })
+                .ToList();
+
+            return savings;
+        }
+
+        public SavingDetailsServiceModel Details(int savingId)
+            => this.data
+              .Savings
+              .Where(c => c.Id == savingId && c.IsDeleted != true)
+              .Select(c => new SavingDetailsServiceModel
+              {
+                  Id = c.Id,
+                  Name = c.Name,
+                  DesiredTotal = c.DesiredTotal,
+                  CurrentTotal = c.CurrentTotal,
+                  UserId = c.UserId
+              })
+              .FirstOrDefault();
+
+        public bool EditSaving(int id, string name, decimal desiredTotal)
+        {
+            var editedSaving = this.data.Savings.Find(id);
+
+            if (editedSaving == null || editedSaving.IsDeleted == true)
+            {
+                return false;
+            }
+
+            editedSaving.Name = name;
+            editedSaving.DesiredTotal = desiredTotal;            
+
+            this.data.SaveChanges();
+
+            return true;
+        }
+
+        public bool DeleteSaving(int savingId)
+        {
+            var deletedSaving = FindSaving(savingId);
+
+            if (deletedSaving == null || deletedSaving.IsDeleted == true)
+            {
+                return false;
+            }
+
+            deletedSaving.IsDeleted = true;
+
+            data.SaveChanges();
+            return true;
         }
 
         public SavingServiceModel Total(string currentUserId)
@@ -44,7 +126,7 @@
                 .Select(c => new SavingServiceModel
                 {
                     Id = c.Id,
-                    Total = c.Total
+                    Total = c.CurrentTotal
                 })
                 .FirstOrDefault();
 
@@ -60,7 +142,7 @@
                 {
                     Id = p.Id,
                     Date = p.Date.ToString("dd/MM/yyyy"),
-                    Amount = p.Amount                    
+                    Amount = p.Amount
                 })
                 .ToList();
 
@@ -82,7 +164,7 @@
             if (IsSavingExist(savingToBeRedusedId))
             {
                 var saving = FindSavingById(savingToBeRedusedId);
-                saving.Total -= deletedContribution.Amount;
+                saving.CurrentTotal -= deletedContribution.Amount;
             }
             else
             {
@@ -110,8 +192,8 @@
             if (IsSavingExist(editedData.SavingId))
             {
                 var saving = FindSavingById(editedData.SavingId);
-                
-                 saving.Total -= differenceBetweenPreviousAndCurrentAmount;             
+
+                saving.CurrentTotal -= differenceBetweenPreviousAndCurrentAmount;
             }
             else
             {
@@ -127,12 +209,12 @@
             .ApplicationUsers
             .Any(e => e.Id == currentUserId);
 
-        public int FindSavingIdByUserId(string userId)
-            => this.data
-                .ApplicationUsers
-                .Where(c => c.Id == userId)
-                .Select(c => c.Saving.Id)
-                .FirstOrDefault();
+        //public int FindSavingIdByUserId(string userId)
+        //    => this.data
+        //        .ApplicationUsers
+        //        .Where(c => c.Id == userId)
+        //        .Select(c => c.Saving.Id)
+        //        .FirstOrDefault();
 
         public bool IsSavingExist(int savingId)
             => data
@@ -174,6 +256,15 @@
                 Amount = c.Amount,
                 SavingId = c.SavingId
             })
-            .FirstOrDefault();        
+            .FirstOrDefault();
+
+        public int FindSavingIdByUserId(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Saving FindSaving(int savingId)
+            => this.data
+            .Savings.Find(savingId);
     }
 }

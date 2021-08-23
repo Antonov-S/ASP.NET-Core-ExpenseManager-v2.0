@@ -9,8 +9,15 @@
         public int Id { get; init; }
 
         [Required]
+        public string Name { get; set; }
+
+        [Required]
         [Column(TypeName = "decimal(10, 2)")]
-        public decimal Total { get; set; }
+        public decimal DesiredTotal { get; set; }
+
+        [Required]
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal CurrentTotal { get; set; }
 
         [Required]
         public bool IsDeleted { get; set; }

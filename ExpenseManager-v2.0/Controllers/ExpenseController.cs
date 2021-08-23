@@ -38,7 +38,7 @@
 
             expenseService.POSTAdd(expense, currentUserId);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(All));
         }
 
         [Authorize]

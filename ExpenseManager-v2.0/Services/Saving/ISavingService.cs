@@ -2,11 +2,19 @@
 {
     using System.Collections.Generic;
     using ExpenseManager_v2._0.Data.Models;
+    using ExpenseManager_v2._0.Views.Saving;
 
     public interface ISavingService
     {
-        AddContributionServiceModel GETAdd();
-        void POSTAdd(AddContributionServiceModel addContributionModel, int savingId, string userId);
+        public AddSavingServiceModel GETAddSaving();
+        public void POSTAddSaving(AddSavingServiceModel addSavingModel, string userId);
+        public AddContributionServiceModel GETAddContribution();
+        public IEnumerable<SavingServiceListingModel> All(string userId);
+        public SavingDetailsServiceModel Details(int savingId);
+        public bool EditSaving(int id, string name, decimal desiredTotal);
+        public bool DeleteSaving(int savingId);
+        public Saving FindSaving(int savingId);
+        public void POSTAddContribution(AddContributionServiceModel addContributionModel, int savingId, string userId);
         public SavingServiceModel Total(string currentUserId);
         public bool IsUserExist(string currentUserId);
         public int FindSavingIdByUserId(string userId);

@@ -42,7 +42,7 @@
         public bool IsDeleted { get; set; }
 
         [Required]
-        public string UserId { get; init; }
+        public string UserId { get; set; }
         public ApplicationUser User { get; init; }
 
         public IEnumerable<InstallmentLoan> InstallmentLoans { get; init; } = new List<InstallmentLoan>();

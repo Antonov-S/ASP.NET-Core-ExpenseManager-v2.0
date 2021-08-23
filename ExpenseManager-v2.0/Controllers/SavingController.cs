@@ -1,7 +1,7 @@
 ﻿namespace ExpenseManager_v2._0.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;    
     using ExpenseManager_v2._0.Infrastructure;
     using ExpenseManager_v2._0.Services.Saving;
 
@@ -13,31 +13,126 @@
             => this.savingService = savingService;
 
         [Authorize]
-        public IActionResult Add()
-            => View(savingService.GETAdd());
+        public IActionResult AddSaving()
+            => View(savingService.GETAddSaving());
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddContributionServiceModel contribution, int Id)
+        public IActionResult AddSaving(AddSavingServiceModel saving)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(saving);
+            }
+
+            var userId = this.User.GetId();
+
+            savingService.POSTAddSaving(saving, userId);
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [Authorize]
+        public IActionResult AddContribution()
+            => View(savingService.GETAddContribution());
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult AddContribution(AddContributionServiceModel contribution, int Id)
         {
             if (!ModelState.IsValid)
             {
                 return View(contribution);
             }
             var currentUserId = this.User.GetId();
-            savingService.POSTAdd(contribution, Id, currentUserId);
+            savingService.POSTAddContribution(contribution, Id, currentUserId);
 
-            return RedirectToAction("Total", "Saving");
+            return RedirectToAction(nameof(All));
         }
 
         [Authorize]
-        public IActionResult Total()
+        public IActionResult All()
         {
             var currentUserId = this.User.GetId();
 
-            var currentSavingTotal = savingService.Total(currentUserId);
+            var savingsForThisUser = this.savingService.All(currentUserId);
 
-            return View(currentSavingTotal);
+            return View(savingsForThisUser);
+        }
+
+        [Authorize]
+        public IActionResult EditSaving(int id)
+        {
+            var userId = this.User.GetId();
+
+            var savingToBeEdited = this.savingService.Details(id);
+
+            if (savingToBeEdited.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            return View(new AddSavingServiceModel
+            {
+                Id = savingToBeEdited.Id,
+                Name = savingToBeEdited.Name,
+                DesiredTotal = savingToBeEdited.DesiredTotal,
+
+            });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult EditSaving(int id, AddSavingServiceModel savingToBeEdited)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(savingToBeEdited);
+            }
+
+            var edited = this.savingService.EditSaving(id, savingToBeEdited.Name, savingToBeEdited.DesiredTotal);
+
+            if (!edited)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [Authorize]
+        public ActionResult Details(int id)
+        {
+            var exists = savingService.IsSavingExist(id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var detailedSaving = savingService.Details(id);
+
+            return View(detailedSaving);
+        }
+
+        [Authorize]
+        public IActionResult DeleteSaving(int id)
+        {
+            var exists = savingService.IsSavingExist(id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var result = savingService.DeleteSaving(id);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(All));
         }
 
         [Authorize]
@@ -54,7 +149,7 @@
         }
 
         [Authorize]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteContribution(int id)
         {
             var exists = savingService.IsContributionExist(id);
             if (!exists)
@@ -73,7 +168,7 @@
         }
 
         [Authorize]
-        public IActionResult Edit(int id)
+        public IActionResult EditContribution(int id)
         {
             var userId = this.User.GetId();
 
@@ -90,7 +185,7 @@
 
         [Authorize]
         [HttpPost]
-        public IActionResult Edit(AddContributionServiceModel contributionModel, int id)
+        public IActionResult EditContribution(AddContributionServiceModel contributionModel, int id)
         {
             if (!ModelState.IsValid)
             {
@@ -110,7 +205,7 @@
 
             //var Id = savingService.FindSavingByContributionId(contributionModel.Id);
             //return RedirectToAction(nameof(Contributions), new { id = Id });
-            return RedirectToAction(nameof(Total));
+            return RedirectToAction(nameof(Contributions));
         }
 
 

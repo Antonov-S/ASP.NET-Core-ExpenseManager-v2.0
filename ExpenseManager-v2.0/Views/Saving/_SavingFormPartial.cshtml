@@ -1,0 +1,24 @@
+﻿@model AddSavingServiceModel
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-ld-8 offset-ld-3 col-xl-6">
+        <h2 class="heading-margin text-center">Add Saving</h2>
+
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" class="form-control" placeholder="Example: Saving for a new PC">
+                <span asp-validation-for="Name" class="small text-danger"></span>
+            </div>            
+            <div class="form-group">
+                <label asp-for="DesiredTotal">Desired Total</label>
+                <input asp-for="DesiredTotal" class="form-control" placeholder="Amount of Money Needed">
+                <span asp-validation-for="DesiredTotal" class="small text-danger"></span>
+            </div>            
+            <input style='margin-right:16px' class="btn btn-primary float-left mt-3" type="submit" value="Save" />
+            <a asp-action="All" style='margin-right:16px' class="btn btn-dark float-left mt-3">Back</a>
+        </form>
+    </div>
+</div>
+
+

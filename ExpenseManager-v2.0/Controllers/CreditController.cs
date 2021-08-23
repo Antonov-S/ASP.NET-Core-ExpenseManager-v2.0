@@ -29,7 +29,7 @@
 
             creditService.POSTAdd(credit, userId);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(All));
         }
 
         [Authorize]
@@ -144,7 +144,7 @@
 
             creditService.POSTMakePayment(installmentLoanModel, Id);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(All));
         }
 
         public IActionResult PaymentsOnCredit(int Id)

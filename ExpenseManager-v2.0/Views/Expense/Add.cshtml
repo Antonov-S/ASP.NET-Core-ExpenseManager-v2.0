@@ -1,7 +1,11 @@
 ﻿@model AddExpenseServiceModel
 
-@{ 
+@{
     ViewBag.Title = "Add Expense";
 }
 
 <partial name="_ExpenseFormPartial" model="@Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

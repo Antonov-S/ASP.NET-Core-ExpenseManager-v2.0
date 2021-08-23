@@ -1,30 +1,44 @@
 ﻿namespace ExpenseManager_v2._0.Infrastructure
 {
-    using ExpenseManager_v2._0.Data;
-    using ExpenseManager_v2._0.Data.Models;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using System.Linq;
+    using ExpenseManager_v2._0.Data;
+    using ExpenseManager_v2._0.Data.Models;
+
+    using static WebConstants;    
 
     public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder PrepareDatabase(
             this IApplicationBuilder app)
         {
-            using var scopedServices = app.ApplicationServices.CreateScope();
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            var services = serviceScope.ServiceProvider;
 
-            var data = scopedServices.ServiceProvider.GetService<ExpenseManagerDbContext>();
+            MigrateDatabase(services);
 
-            data.Database.Migrate();
-
-            SeedCategories(data);
+            SeedCategories(services);
+            SeedAdministrator(services);
 
             return app;
         }
 
-        private static void SeedCategories(ExpenseManagerDbContext data)
+        private static void MigrateDatabase(IServiceProvider services)
         {
+            var data = services.GetRequiredService<ExpenseManagerDbContext>();
+
+            data.Database.Migrate();
+        }
+
+        private static void SeedCategories(IServiceProvider services)
+        {
+            var data = services.GetRequiredService<ExpenseManagerDbContext>();
+
             if (data.ExpenseCategories.Any())
             {
                 return;
@@ -71,6 +85,41 @@
             });
 
             data.SaveChanges();
+        }
+
+        private static void SeedAdministrator(IServiceProvider services)
+        {
+            var userMenager = services.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleMenager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            Task
+                .Run(async () =>
+                {
+                    if (await roleMenager.RoleExistsAsync(AdministratorRoleName))
+                    {
+                        return;
+                    }
+
+                    var role = new IdentityRole { Name = AdministratorRoleName };
+
+                    await roleMenager.CreateAsync(role);
+
+                    const string adminEmail = "admin@budget.com";
+                    const string adminPassword = "admin12";
+
+                    var user = new ApplicationUser
+                    {
+                        Email = adminEmail,
+                        UserName = adminEmail,
+                        FullName = "Admin"
+                    };
+
+                    await userMenager.CreateAsync(user, adminPassword);
+
+                    await userMenager.AddToRoleAsync(user, role.Name);
+                })
+                .GetAwaiter()
+                .GetResult();
         }
     }
 }

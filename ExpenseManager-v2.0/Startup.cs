@@ -1,21 +1,25 @@
 namespace ExpenseManager_v2._0
 {
-    using ExpenseManager_v2._0.Data;
-    using ExpenseManager_v2._0.Infrastructure;
-    using ExpenseManager_v2._0.Services.Credit;
-    using ExpenseManager_v2._0.Services.Expense;
-    using ExpenseManager_v2._0.Services.Income;
-    using ExpenseManager_v2._0.Services.Saving;
-    using ExpenseManager_v2._0.Services.Statistics;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    
+    using AutoMapper;
+    using ExpenseManager_v2._0.Mappings;
+    using ExpenseManager_v2._0.Data;
+    using ExpenseManager_v2._0.Infrastructure;
+    using ExpenseManager_v2._0.Services.Borrowed;
+    using ExpenseManager_v2._0.Services.Credit;
+    using ExpenseManager_v2._0.Services.Expense;
+    using ExpenseManager_v2._0.Services.Income;
+    using ExpenseManager_v2._0.Services.Saving;
+    using ExpenseManager_v2._0.Services.Statistics;    
+    using ExpenseManager_v2._0.Data.Models;    
+
     public class Startup
     {
         public Startup(IConfiguration configuration) 
@@ -33,14 +37,23 @@ namespace ExpenseManager_v2._0
                 .AddDatabaseDeveloperPageExceptionFilter();
 
             services
-                .AddDefaultIdentity<IdentityUser>(options =>
+                .AddDefaultIdentity<ApplicationUser>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ExpenseManagerDbContext>();
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services
                 .AddControllersWithViews(options =>
@@ -62,12 +75,14 @@ namespace ExpenseManager_v2._0
 
             services
                 .AddTransient<ISavingService, SavingService>();
+
+            services
+                .AddTransient<IBorrowedService, BorrowedService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.PrepareDatabase();
-
 
             if (env.IsDevelopment())
             {
