@@ -1,6 +1,5 @@
 ﻿namespace ExpenseManager_v2._0.Controllers
 {
-    using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Models.Home;
     using ExpenseManager_v2._0.Services.Statistics;
     using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,7 @@
     {
         private readonly IStatisticsService statistics;
 
-        public HomeController(IStatisticsService statistics, ExpenseManagerDbContext data)
+        public HomeController(IStatisticsService statistics)
             => this.statistics = statistics;
 
         public IActionResult Index()

@@ -16,7 +16,8 @@
             var totalReportedTrasactions = this.data.Expenses.Count() 
                 + this.data.Incomes.Count() 
                 + this.data.Credits.Count() 
-                + this.data.InstallmentLoans.Count();
+                + this.data.InstallmentLoans.Count()
+                + this.data.Savings.Count();
             var totalUsers = this.data.Users.Count();
 
             return new StatisticsServiceModel
