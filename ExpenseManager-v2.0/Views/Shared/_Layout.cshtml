@@ -24,6 +24,12 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav">
+                        @if (User.IsInRole(WebConstants.AdministratorRoleName))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Users" asp-action="All">Administration</a>
+                            </li>
+                        }
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
                                 Expenses
@@ -59,7 +65,7 @@
                                 <li><a class="dropdown-item text-dark" asp-controller="Saving" asp-action="AddSaving">Add</a></li>
                                 <li><a class="dropdown-item text-dark" asp-controller="Saving" asp-action="All">All</a></li>
                             </ul>
-                        </li>                        
+                        </li>
                     </ul>
                 </div>
                 <partial name="_LoginPartial" />

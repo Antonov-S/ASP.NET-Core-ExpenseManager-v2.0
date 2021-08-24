@@ -4,6 +4,7 @@
     using System.Globalization;
     using ExpenseManager_v2._0.Data.Models;
     using ExpenseManager_v2._0.Services.Credit;
+    using ExpenseManager_v2._0.Services.Users;
 
     public class MappingProfile : Profile
     {
@@ -24,6 +25,10 @@
                 .ReverseMap();
 
             CreateMap<ListingInstallmentLoansServiceModel, InstallmentLoan>().ReverseMap();
+
+            CreateMap<AddCreditServiceModel, Credit>().ReverseMap();
+
+            CreateMap<UserListingModel, ApplicationUser>().ReverseMap();
         }
     }
 }

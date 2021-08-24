@@ -16,7 +16,8 @@ namespace ExpenseManager_v2._0
     using ExpenseManager_v2._0.Services.Income;
     using ExpenseManager_v2._0.Services.Saving;
     using ExpenseManager_v2._0.Services.Statistics;    
-    using ExpenseManager_v2._0.Data.Models;    
+    using ExpenseManager_v2._0.Data.Models;
+    using ExpenseManager_v2._0.Services.Users;
 
     public class Startup
     {
@@ -72,6 +73,9 @@ namespace ExpenseManager_v2._0
 
             services
                 .AddTransient<IBorrowedService, BorrowedService>();
+
+            services
+                .AddTransient<IUsersService, UsersService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
