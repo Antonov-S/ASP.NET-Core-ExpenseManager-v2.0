@@ -47,6 +47,8 @@ namespace ExpenseManager_v2._0
 
             services.AddAutoMapper(typeof(Startup));
 
+            services.AddMemoryCache();
+
             services
                 .AddControllersWithViews(options =>
                 {
