@@ -1,7 +1,8 @@
 ﻿namespace xpenseManager_v2._0.Tests.Controller
 {
     using Xunit;
-    using Microsoft.AspNetCore.Mvc;    
+    using Microsoft.AspNetCore.Mvc;
+    using MyTested.AspNetCore.Mvc;
     using ExpenseManager_v2._0.Controllers;
     using ExpenseManager_v2._0.Services.Statistics;
     using xpenseManager_v2._0.Tests.Mocks;
