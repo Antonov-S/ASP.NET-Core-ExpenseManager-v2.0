@@ -5,6 +5,8 @@
     using Microsoft.AspNetCore.Mvc;
     using ExpenseManager_v2._0.Infrastructure;
 
+    using static WebConstants;
+
 
     public class IncomeController : Controller
     {
@@ -38,6 +40,7 @@
 
             incomeService.POSTAdd(income, userId);
 
+            TempData[GlobalMessageKey] = "Your expense was added successfuly!";
             return RedirectToAction(nameof(All));
         }
 
@@ -104,6 +107,7 @@
                 return BadRequest();
             }
 
+            TempData[GlobalMessageKey] = "Your expense was edited successfuly!";
             return RedirectToAction(nameof(All));
         }
 

@@ -5,6 +5,8 @@
     using ExpenseManager_v2._0.Services.Expense;
     using ExpenseManager_v2._0.Infrastructure;
 
+    using static WebConstants;
+
     public class ExpenseController : Controller
     {
         private readonly IExpenseService expenseService;
@@ -37,6 +39,8 @@
             var currentUserId = this.User.GetId();
 
             expenseService.POSTAdd(expense, currentUserId);
+
+            TempData[GlobalMessageKey] = "Your expense was saved successfuly!";
 
             return RedirectToAction(nameof(All));
         }
@@ -105,7 +109,8 @@
                     return BadRequest();
                 }
 
-                return RedirectToAction(nameof(All));
+            TempData[GlobalMessageKey] = "Your expense was edited successfuly!";
+            return RedirectToAction(nameof(All));
             
         }
 
@@ -146,6 +151,7 @@
                 return BadRequest();
             }
 
+            //TempData[GlobalMessageKey] = "Your expense was deleted successfuly!";
             return RedirectToAction(nameof(All));
         }
 

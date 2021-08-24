@@ -5,6 +5,8 @@
     using ExpenseManager_v2._0.Infrastructure;
     using ExpenseManager_v2._0.Services.Saving;
 
+    using static WebConstants;
+
     public class SavingController : Controller
     {
         private readonly ISavingService savingService;
@@ -29,6 +31,7 @@
 
             savingService.POSTAddSaving(saving, userId);
 
+            TempData[GlobalMessageKey] = "Your saving was added successfuly!";
             return RedirectToAction(nameof(All));
         }
 
@@ -46,6 +49,8 @@
             }
             var currentUserId = this.User.GetId();
             savingService.POSTAddContribution(contribution, Id, currentUserId);
+
+            TempData[GlobalMessageKey] = "Your contribution on this saving was added successfuly!";
 
             return RedirectToAction(nameof(All));
         }
@@ -97,6 +102,7 @@
                 return BadRequest();
             }
 
+            TempData[GlobalMessageKey] = "Your saving was edited successfuly!";
             return RedirectToAction(nameof(All));
         }
 
@@ -203,8 +209,7 @@
                 return BadRequest();
             }
 
-            //var Id = savingService.FindSavingByContributionId(contributionModel.Id);
-            //return RedirectToAction(nameof(Contributions), new { id = Id });
+            TempData[GlobalMessageKey] = "Your contribution was edited successfuly!";
             return RedirectToAction(nameof(Contributions));
         }
 

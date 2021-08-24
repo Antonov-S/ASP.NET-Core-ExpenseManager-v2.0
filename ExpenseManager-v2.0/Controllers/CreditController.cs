@@ -5,6 +5,8 @@
     using ExpenseManager_v2._0.Services.Credit;
     using Microsoft.AspNetCore.Authorization;
 
+    using static WebConstants;
+
     public class CreditController : Controller
     {
         private readonly ICreditService creditService;
@@ -29,6 +31,7 @@
 
             creditService.POSTAdd(credit, userId);
 
+            TempData[GlobalMessageKey] = "Your credit was added successfuly!";
             return RedirectToAction(nameof(All));
         }
 
@@ -91,6 +94,7 @@
                 return BadRequest();
             }
 
+            TempData[GlobalMessageKey] = "Your credit was edited successfuly!";
             return RedirectToAction(nameof(All));
         }
 
@@ -144,6 +148,7 @@
 
             creditService.POSTMakePayment(installmentLoanModel, Id);
 
+            TempData[GlobalMessageKey] = "Your payment on this credit was added successfuly!";
             return RedirectToAction(nameof(All));
         }
 
