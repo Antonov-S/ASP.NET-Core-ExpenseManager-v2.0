@@ -3,6 +3,8 @@
     using System.ComponentModel.DataAnnotations;
     using ExpenseManager_v2._0.Data.Models;
 
+    using static Data.DataConstants.InstallmentLoan;
+
     public class AddInstallmentLoansServiceModel
     {
         public int Id { get; init; }
@@ -11,7 +13,7 @@
         public string Date { get; init; }
 
         [Required]
-        [Range(00001, int.MaxValue, ErrorMessage = "Amount must be a positive number")]
+        [Range(00001, int.MaxValue, ErrorMessage = ErrorMessageAmount)]
         public decimal Amount { get; init; }
 
         public int CreditId { get; init; }

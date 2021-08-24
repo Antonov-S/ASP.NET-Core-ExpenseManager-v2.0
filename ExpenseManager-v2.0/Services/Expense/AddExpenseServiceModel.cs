@@ -3,14 +3,14 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static Data.DataConstants;
+    using static Data.DataConstants.Expense;
 
     public class AddExpenseServiceModel
     {
         public int Id { get; init; }
 
         [Required]
-        [StringLength(Expense.NameMaxLength, MinimumLength = Expense.NameMinLength)]
+        [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
         public string Name { get; init; }
 
         [Required]
@@ -18,13 +18,13 @@
         public string ExpensDate { get; init; }
 
         [Required]
-        [Range(00001, int.MaxValue, ErrorMessage = "Amount must be a positive number")]
+        [Range(00001, int.MaxValue, ErrorMessage = ErrorMessageAmount)]
         public decimal Amount { get; init; }
 
         [Required]
-        [StringLength(Expense.NotesMaxLength,
-            MinimumLength = Expense.NotesMinLength,
-            ErrorMessage = "The field must be with a minimum length of {2}")]
+        [StringLength(NotesMaxLength,
+            MinimumLength = NotesMinLength,
+            ErrorMessage = ErrorMessageNotes)]
         public string Notes { get; init; }
 
 

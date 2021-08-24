@@ -15,7 +15,7 @@
 
         [Required]
         [Display(Name = "Amount of Monthly Installment")]
-        [Range(00001, int.MaxValue, ErrorMessage = "Amount must be a positive number")]
+        [Range(00001, int.MaxValue, ErrorMessage = ErrorMessageAmount)]
         public decimal AmountOfMonthlyInstallment { get; init; }
 
         [Required]
@@ -31,12 +31,12 @@
         public string MaturityDate { get; init; }
 
         [Required]
-        [Range(00001, int.MaxValue, ErrorMessage = "Amount must be a positive number")]
+        [Range(00001, int.MaxValue, ErrorMessage = ErrorMessageAmount)]
         public decimal Total { get; init; }
 
         [StringLength(NotesMaxLength,
             MinimumLength = NotesMinLength,
-            ErrorMessage = "The field must be with a minimum length of {2}")]
+            ErrorMessage = ErrorMessageNotes)]
         public string Notes { get; init; }
     }
 }

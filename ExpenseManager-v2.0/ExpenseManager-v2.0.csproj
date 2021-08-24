@@ -24,8 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Models\Expense\" />
-    <Folder Include="Models\Income\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

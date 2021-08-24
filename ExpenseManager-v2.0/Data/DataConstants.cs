@@ -19,6 +19,9 @@
 
             public const int NotesMinLength = 10;
             public const int NotesMaxLength = 300;
+
+            public const string ErrorMessageNotes = "The field must be with a minimum length of {2}";
+            public const string ErrorMessageAmount = "Amount must be a positive number";
         }
 
         public class Income
@@ -28,6 +31,9 @@
 
             public const int NotesMinLength = 10;
             public const int NotesMaxLength = 300;
+
+            public const string ErrorMessageNotes = "The field must be with a minimum length of {2}";
+            public const string ErrorMessageAmount = "Amount must be a positive number";
         }
 
         public class Categorys
@@ -43,12 +49,30 @@
 
             public const int NotesMinLength = 10;
             public const int NotesMaxLength = 300;
+
+            public const string ErrorMessageNotes = "The field must be with a minimum length of {2}";
+            public const string ErrorMessageAmount = "Amount must be a positive number";
         }
 
         public class BorrowedItem
         {
             public const int NameMinLength = 3;
             public const int NameMaxLength = 50;
+        }
+
+        public class InstallmentLoan
+        {
+            public const string ErrorMessageAmount = "Amount must be a positive number";
+        }
+
+        public class Saving
+        {
+            public const string ErrorMessageAmount = "Amount must be a positive number";
+        }
+
+        public class ContributionToSaving
+        {
+            public const string ErrorMessageAmount = "Amount must be a positive number";
         }
     }
 }

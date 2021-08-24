@@ -8,8 +8,6 @@ namespace ExpenseManager_v2._0
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using AutoMapper;
-    using ExpenseManager_v2._0.Mappings;
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Infrastructure;
     using ExpenseManager_v2._0.Services.Borrowed;
@@ -47,13 +45,7 @@ namespace ExpenseManager_v2._0
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ExpenseManagerDbContext>();
 
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
+            services.AddAutoMapper(typeof(Startup));
 
             services
                 .AddControllersWithViews(options =>
@@ -103,10 +95,7 @@ namespace ExpenseManager_v2._0
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
-                    endpoints.MapControllerRoute(
-                        name: "Areas",
-                        pattern: "/{area:exists}/{controller=Home}/{action=Index}/{id?}");
-                    
+                    endpoints.MapDefaultAreaRoute();
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });

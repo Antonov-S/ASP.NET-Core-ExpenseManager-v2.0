@@ -1,9 +1,9 @@
-﻿namespace ExpenseManager_v2._0.Mappings
+﻿namespace ExpenseManager_v2._0.Infrastructure
 {
     using AutoMapper;
+    using System.Globalization;
     using ExpenseManager_v2._0.Data.Models;
     using ExpenseManager_v2._0.Services.Credit;
-    using System.Globalization;
 
     public class MappingProfile : Profile
     {
@@ -13,7 +13,7 @@
 
             CreateMap<Credit, CreditServiceListingModel>()
                 .ForMember(
-                p => p.MaturityDate, 
+                p => p.MaturityDate,
                 opt => opt.MapFrom(p => p.MaturityDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
                 .ReverseMap();
 
@@ -23,7 +23,7 @@
                 opt => opt.MapFrom(p => p.MaturityDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
                 .ReverseMap();
 
-            CreateMap<ListingInstallmentLoansServiceModel, InstallmentLoan>().ReverseMap();            
+            CreateMap<ListingInstallmentLoansServiceModel, InstallmentLoan>().ReverseMap();
         }
     }
 }

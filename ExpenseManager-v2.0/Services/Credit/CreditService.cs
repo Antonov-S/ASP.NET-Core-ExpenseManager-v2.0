@@ -6,7 +6,7 @@
     using AutoMapper;
     using ExpenseManager_v2._0.Data;
     using ExpenseManager_v2._0.Data.Models;
-    
+    using AutoMapper.QueryableExtensions;
 
     public class CreditService : ICreditService
     {
@@ -39,11 +39,10 @@
                 .Credits
                 .Where(c => c.UserId == currentUserId && c.IsDeleted != true)
                 .OrderByDescending(c => c.Id)
+                .ProjectTo<CreditServiceListingModel>(this._mapper.ConfigurationProvider)
                 .ToList();
 
-            var payments = _mapper.Map<List<Credit>, List<CreditServiceListingModel>>(credits);
-
-            return payments;
+            return credits;
         }
 
         public CreditDetailsServiceModel Details(int creditId)
@@ -127,11 +126,10 @@
             var installmentLoans = this.data
                 .InstallmentLoans
                 .Where(p => p.CreditId == creditId && p.IsDeleted != true)
+                .ProjectTo<ListingInstallmentLoansServiceModel>(this._mapper.ConfigurationProvider)
                 .ToList();
 
-            var payments = _mapper.Map<List<InstallmentLoan>, List<ListingInstallmentLoansServiceModel>>(installmentLoans);
-
-            return payments;
+            return installmentLoans;
         }
 
         public bool DeletePayment(int Id)
